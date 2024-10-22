@@ -26,7 +26,7 @@
 1. **Clone the repository by clicking `Get from VCS`**:
     - URL: `https://github.com/pawekz/campusconnect.git`
 
-2. **IntelliJ IDEA will automatically download and install the Java dependencies listed in the `pom.xml` file**.
+2. **IntelliJ IDEA will automatically download and install the Java dependencies listed in the `pom.xml` file, just click `Load Maven Project`**.
 
 3. **Navigate to the frontend directory (if applicable)**:
     ```sh
@@ -39,5 +39,36 @@
     ```sh
     npm install
     ```
+
+6. **Install axios**:
+   ```sh
+   npm install axios
+   ```
+
+7. **Install MUI**:
+   ```sh
+   npm install @mui/material @emotion/react @emotion/styled
+   ```
+
+8. **In the `application.properties`, adjust the username / password**
+```
+spring.application.name=campusconnect
+
+spring.datasource.url=jdbc:mysql://localhost:3306/campusconnect
+spring.datasource.username=**<YOUR USERNAME>**
+spring.datasource.password=**<YOUR PASSWORD>**
+spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
+
+spring.jpa.hibernate.ddl-auto=create
+spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MySQLDialect
+```
+
+
+9. **In the `Current File` the configurations `ReactJS` and `CampusconnectApplication` are already setup, try to run each**
+![image](https://github.com/user-attachments/assets/5f85766f-99ec-423b-ae9b-b9984d12e888)
+
+
+9. **If it runs, congrats**
+
 
 
