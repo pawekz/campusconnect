@@ -30,7 +30,7 @@
 
 3. **Navigate to the frontend directory (if applicable)**:
     ```sh
-    cd campusconnect
+    cd campusconnect-react
     ```
 
 4. **Open the Terminal within IntelliJ IDEA** (`View` > `Tool Windows` > `Terminal`).
