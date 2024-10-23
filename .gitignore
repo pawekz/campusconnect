@@ -31,4 +31,10 @@ build/
 
 ### VS Code ###
 .vscode/
-application.properties
+
+campusconnect-react/node_modules/
+campusconnect-react/.env
+campusconnect-react/build/
+campusconnect-react/.cache
+
+target
