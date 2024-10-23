@@ -28,12 +28,12 @@
 
 2. **IntelliJ IDEA will automatically download and install the Java dependencies listed in the `pom.xml` file, just click `Load Maven Project`**.
 
-3. **Navigate to the frontend directory (if applicable)**:
+3. **Open the Terminal within IntelliJ IDEA** (`View` > `Tool Windows` > `Terminal`).
+
+4. **Navigate to the frontend directory (if applicable)**:
     ```sh
     cd campusconnect-react
     ```
-
-4. **Open the Terminal within IntelliJ IDEA** (`View` > `Tool Windows` > `Terminal`).
 
 5. **Install JavaScript dependencies**:
     ```sh
