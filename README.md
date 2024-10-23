@@ -65,6 +65,8 @@ spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MySQLDialect
 
 
 9. **In the `Current File` the configurations `ReactJS` and `CampusconnectApplication` are already setup, try to run each**
+
+
 ![image](https://github.com/user-attachments/assets/5f85766f-99ec-423b-ae9b-b9984d12e888)
 
 
