@@ -1,4 +1,4 @@
-package com.teamnullpointer.campusconnect.service;
-
-public class MessageService {
-}
+//package com.teamnullpointer.campusconnect.service;
+//
+//public class MessageService {
+//}

@@ -1,3 +1,4 @@
+/*
 package controller;
 
 import com.teamnullpointer.campusconnect.entity.MessageEntity;
@@ -6,13 +7,13 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(method = RequestMethod.GET, path = "/message")
-public class MessageController {
+public dwaclass MessageController {
     @Autowired
     private MessageService messageService;
 
     @GetMapping("/print")
     public String print() {return "Message Controller";}
-        return messageService.getMessages();
+      return messageService.getMessages();
 }
 
 @PostMapping("/postmessage")
@@ -30,3 +31,4 @@ public String deleteMessage(@PathVariable int id) {
     return messageService.deleteMessage(id);
 }
 }
+*/
