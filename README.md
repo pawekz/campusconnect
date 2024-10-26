@@ -1,5 +1,14 @@
 # <span style="font-family: 'Arial', sans-serif; font-weight: bold; color: #2E8B57;">**Campus Connect**: Your One-Stop Shop for Student Life</span>
 
+
+**CSIT321G2 - App Dev**<br>
+**CSIT340 - Industry Elective 1****
+
+**Members: <br>**
+_Paulo Carabuena<br>
+Neil Adrian Bas<br>
+Jenelyn Mendoza<br>_
+
 ## Features
 
 - **Secure Login/Logout**: University email verification for user authentication
