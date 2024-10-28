@@ -1,5 +1,14 @@
 # <span style="font-family: 'Arial', sans-serif; font-weight: bold; color: #2E8B57;">**Campus Connect**: Your One-Stop Shop for Student Life</span>
 
+
+**CSIT321G2 - App Dev**<br>
+**CSIT340 - Industry Elective 1****
+
+**Members: <br>**
+_Paulo Carabuena<br>
+Neil Adrian Bas<br>
+Jenelyn Mendoza<br>_
+
 ## Features
 
 - **Secure Login/Logout**: University email verification for user authentication
@@ -49,8 +58,13 @@
    ```sh
    npm install @mui/material @emotion/react @emotion/styled
    ```
+   
+8. **Install React Router DOM**
+    ```sh
+    npm install react-router-dom
+    ```
 
-8. **In the `application.properties`, adjust the username / password**
+9 **In the `application.properties`, adjust the username / password**
 ```
 spring.application.name=campusconnect
 
@@ -64,13 +78,13 @@ spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MySQLDialect
 ```
 
 
-9. **In the `Current File` the configurations `ReactJS` and `CampusconnectApplication` are already setup, try to run each (CampusconnectApplication, then ReactJS)**
+10. **In the `Current File` the configurations `ReactJS` and `CampusconnectApplication` are already setup, try to run each (CampusconnectApplication, then ReactJS)**
 
 
 ![image](https://github.com/user-attachments/assets/5f85766f-99ec-423b-ae9b-b9984d12e888)
 
 
-9. **If it runs, congrats**
+11. **If it runs, congrats**
 
 
 

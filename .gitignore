@@ -38,3 +38,5 @@ campusconnect-react/build/
 campusconnect-react/.cache
 
 target
+node_modules
+
