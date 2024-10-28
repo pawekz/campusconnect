@@ -1,9 +1,11 @@
 package com.teamnullpointer.campusconnect.controller;
 
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@RequestMapping("/account")
 public class AccountController {
 
     @GetMapping("/print")
@@ -13,5 +15,5 @@ public class AccountController {
 }
 
 //this is a test controller to check if the application is running
-//it will return "Hello World" when you go to localhost:8080/print
+//it will return "Hello World" when you go to localhost:8080/api/print
 //if you see "Hello World" while running localhost:5173, then the application is running

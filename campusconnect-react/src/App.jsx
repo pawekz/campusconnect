@@ -1,17 +1,24 @@
 import React, { useState, useEffect } from 'react';
-import HelloWorld   from "./HelloWorld.jsx"; /*remove this one if confirmed that it is working*/
+import axios from 'axios';
 
 function App() {
+    const [message, setMessage] = useState('');
+
+    useEffect(() => {
+        axios.get('/print')
+            .then(response => {
+                setMessage(response.data);
+            })
+            .catch(error => {
+                console.error('There was an error fetching the data!', error);
+            });
+    }, []);
 
     return (
         <div className="App">
-            {/*sample hello world*/}
-            <HelloWorld />
+            <h1>{message}</h1>
         </div>
     );
 }
 
 export default App;
-
-/*you can delete <HelloWorld /> */
-/*this is a test for communicating with backer*/
