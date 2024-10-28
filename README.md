@@ -60,9 +60,9 @@ Jenelyn Mendoza<br>_
    ```
 
 7.1 **Install MUI Icons Material**
-    ```sh
-    npm install @mui/icons-material
-    ```
+   ```sh
+   npm install @mui/icons-material
+   ```
 
 8. **Install React Router DOM**
     ```sh
