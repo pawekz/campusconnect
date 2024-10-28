@@ -69,6 +69,11 @@ Jenelyn Mendoza<br>_
     npm install react-router-dom
     ```
 
+8.1 **Install React Buddy IDE Toolbox**
+   ```sh
+   npm install @react-buddy/ide-toolbox
+```
+
 
 9 **In the `application.properties`, adjust the username / password**
 ```
