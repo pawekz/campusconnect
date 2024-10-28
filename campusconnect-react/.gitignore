@@ -22,3 +22,8 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+# React Buddy
+src/dev/.buddy
+src/dev/.buddy.json
+src/dev/.buddyrc
+
