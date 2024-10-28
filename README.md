@@ -58,19 +58,25 @@ Jenelyn Mendoza<br>_
    ```sh
    npm install @mui/material @emotion/react @emotion/styled
    ```
-   
+
+7.1 **Install MUI Icons Material**
+    ```sh
+    npm install @mui/icons-material
+    ```
+
 8. **Install React Router DOM**
     ```sh
     npm install react-router-dom
     ```
+
 
 9 **In the `application.properties`, adjust the username / password**
 ```
 spring.application.name=campusconnect
 
 spring.datasource.url=jdbc:mysql://localhost:3306/campusconnect
-spring.datasource.username=**<YOUR USERNAME>**
-spring.datasource.password=**<YOUR PASSWORD>**
+spring.datasource.username=root
+spring.datasource.password=Iamroot96
 spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
 
 spring.jpa.hibernate.ddl-auto=create
@@ -84,7 +90,7 @@ spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MySQLDialect
 ![image](https://github.com/user-attachments/assets/5f85766f-99ec-423b-ae9b-b9984d12e888)
 
 
-11. **If it runs, congrats**
+11. **If it runs, congrats, if not, reload MAVEN project**
 
 
 
