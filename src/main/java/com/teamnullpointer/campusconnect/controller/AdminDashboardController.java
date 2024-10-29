@@ -12,6 +12,11 @@ public class AdminDashboardController {
     @Autowired
     private AdminDashboardService service;
 
+    @GetMapping("/test")
+    public String test(){
+        return "You're Accessing the Admin Dashboard Controller";
+    }
+
     @GetMapping("/viewPlatformStats")
     public AdminDashboardEntity viewPlatformStats() {
         return service.viewPlatformStats();
