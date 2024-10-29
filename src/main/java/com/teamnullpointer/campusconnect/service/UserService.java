@@ -6,26 +6,29 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Service
 public class UserService {
     @Autowired
     UserRepository urepo;
 
-    public UserService() { super();
+    public UserService() {
+        super();
     }
-    public UserEntity postUserRepository(UserEntity user) {
-        return urepo.save(user);
-    }
-    public List<UserEntity> getAllUsers() {
-        return urepo.findAll();
-    }
+
     public UserEntity postUserRecord(UserEntity user) {
         return urepo.save(user);
     }
+
+    public List<UserEntity> getAllUsers() {
+        return urepo.findAll();
+    }
+
     public List<UserEntity> getUserRecords() {
         return urepo.findAll();
     }
+
     public UserEntity putUserDetails(int id, UserEntity newUserDetails) {
         UserEntity user = new UserEntity();
         try {
@@ -35,9 +38,20 @@ public class UserService {
             user.setName(newUserDetails.getName());
             user.setUser_type(newUserDetails.getUser_type());
         } catch (NoSuchElementException e) {
-            throw new NameNotFoundException("User with id " + id + " not found");
+            throw new NoSuchElementException("User with id " + id + " not found");
         } finally {
             return urepo.save(user);
         }
+    }
+
+    public String deleteUser(int id) {
+        String msg = "";
+        if (urepo.findById(id).isPresent()) {
+            urepo.deleteById(id);
+            msg = "Successfully deleted the user";
+        } else {
+            throw new NoSuchElementException("User with id " + id + " not found");
+        }
+        return msg;
     }
 }

@@ -1,15 +1,20 @@
 package com.teamnullpointer.campusconnect.controller;
-
-
+import com.teamnullpointer.campusconnect.repository.UserRepository;
+import com.teamnullpointer.campusconnect.service.UserService;
+import com.teamnullpointer.campusconnect.entity.UserEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
+
 @RestController
-@RequestMapping(method = {RequestMethod.GET, path = "/user"})
+@RequestMapping("/user")
 public class UserController {
 
     @Autowired
     private UserService userService;
+
 
     @GetMapping("/print")
     public String print() {
@@ -20,12 +25,12 @@ public class UserController {
         return userService.postUserRecord(user);
     }
     @GetMapping("/getuserrecords")
-    public Iterable<UserEntity> getUserRecords() {
-        return userService.getUserRecords();
+    public List<UserEntity> getUserRecords() {
+        return userService.getAllUsers();
     }
     @PutMapping("/updateuserrecord")
-    public UserEntity putUserDetails(@RequestParam int id, @RequestBody UserEntity newUserDetails){
-        return userService.putUserDetails(id, newUserDetails);
+    public UserRepository putUserDetails(@RequestParam int id, @RequestBody UserEntity newUserDetails){
+        return (UserRepository) userService.putUserDetails(id, newUserDetails);
     }
     @DeleteMapping("/deleteuserdetails/{id}")
     public String deleteUserDetails(@PathVariable int id) {
