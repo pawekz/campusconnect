@@ -1,6 +1,6 @@
 package com.teamnullpointer.campusconnect.controller;
-
-
+import com.teamnullpointer.campusconnect.service.UserService;
+import com.teamnullpointer.campusconnect.entity.UserEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -10,6 +10,7 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+
 
     @GetMapping("/print")
     public String print() {
