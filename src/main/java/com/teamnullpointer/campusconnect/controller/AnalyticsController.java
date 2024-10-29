@@ -14,6 +14,11 @@ public class AnalyticsController {
     @Autowired
     private AnalyticsService service;
 
+    @GetMapping("/test")
+    public String test(){
+        return "You're Accessing the Analytics Controller";
+    }
+
     @PostMapping("/updateStats")
     public void updateStats(@RequestParam int userId, @RequestParam int itemsSold, @RequestParam BigDecimal totalEarnings) {
         service.updateStats(userId, itemsSold, totalEarnings);
