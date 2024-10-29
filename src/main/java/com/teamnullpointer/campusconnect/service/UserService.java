@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-
 @Service
 public class UserService {
     @Autowired
@@ -26,15 +25,14 @@ public class UserService {
         return urepo.findAll();
     }
 
-
     public List<UserEntity> getUserRecords() {
         return urepo.findAll();
     }
 
-    public UserRepository putUserDetails(int id, UserEntity newUserDetails) {
-        UserRepository user = (UserRepository) new UserEntity();
+    public UserEntity putUserDetails(int id, UserEntity newUserDetails) {
+        UserEntity user = new UserEntity();
         try {
-            user = (UserRepository) urepo.findById(id).get();
+            user = urepo.findById(id).get();
             user.setEmail(newUserDetails.getEmail());
             user.setPassword(newUserDetails.getPassword());
             user.setName(newUserDetails.getName());
@@ -45,9 +43,10 @@ public class UserService {
             return urepo.save(user);
         }
     }
+
     public String deleteUser(int id) {
         String msg = "";
-        if (urepo.findById(id) != null) {
+        if (urepo.findById(id).isPresent()) {
             urepo.deleteById(id);
             msg = "Successfully deleted the user";
         } else {

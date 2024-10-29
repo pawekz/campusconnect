@@ -30,7 +30,7 @@ public class UserController {
     }
     @PutMapping("/updateuserrecord")
     public UserRepository putUserDetails(@RequestParam int id, @RequestBody UserEntity newUserDetails){
-        return userService.putUserDetails(id, newUserDetails);
+        return (UserRepository) userService.putUserDetails(id, newUserDetails);
     }
     @DeleteMapping("/deleteuserdetails/{id}")
     public String deleteUserDetails(@PathVariable int id) {
