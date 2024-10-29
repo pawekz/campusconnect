@@ -10,7 +10,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/products")
-class Product_ListingController {
+public class    Product_ListingController {
 
     @Autowired
     private Product_ListingRepository repository;
@@ -30,8 +30,12 @@ class Product_ListingController {
         return repository.save(product);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping(value = "/{id}")
     public Product_ListingEntity updateProduct(@PathVariable int id, @RequestBody Product_ListingEntity productDetails) {
+        return getProductListingEntity(id, productDetails, repository);
+    }
+
+    public static Product_ListingEntity getProductListingEntity(@PathVariable int id, @RequestBody Product_ListingEntity productDetails, Product_ListingRepository repository) {
         Product_ListingEntity product = repository.findById(id).orElseThrow(() -> new RuntimeException("Product not found"));
         product.setUser_id(productDetails.getUser_id());
         product.setProduct_title(productDetails.getProduct_title());

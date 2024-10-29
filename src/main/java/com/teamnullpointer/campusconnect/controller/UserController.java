@@ -1,34 +1,42 @@
 package com.teamnullpointer.campusconnect.controller;
 
-
+import com.teamnullpointer.campusconnect.entity.UserEntity;
+import com.teamnullpointer.campusconnect.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+import java.util.Optional;
+
 @RestController
-@RequestMapping(method = {RequestMethod.GET, path = "/user"})
+@RequestMapping("/users")
 public class UserController {
 
     @Autowired
     private UserService userService;
 
-    @GetMapping("/print")
-    public String print() {
-        return "User Controller";
+    @GetMapping
+    public List<UserEntity> getAllUsers() {
+        return userService.getAllUsers();
     }
-    @PostMapping("/postuserrecord")
-    public UserEntity postUserRecord(@RequestBody UserEntity user) {
-        return userService.postUserRecord(user);
+
+    @GetMapping("/{id}")
+    public Optional<UserEntity> getUserById(@PathVariable int id) {
+        return userService.getUserById(id);
     }
-    @GetMapping("/getuserrecords")
-    public Iterable<UserEntity> getUserRecords() {
-        return userService.getUserRecords();
+
+    @PostMapping
+    public UserEntity createUser(@RequestBody UserEntity user) {
+        return userService.createUser(user);
     }
-    @PutMapping("/updateuserrecord")
-    public UserEntity putUserDetails(@RequestParam int id, @RequestBody UserEntity newUserDetails){
-        return userService.putUserDetails(id, newUserDetails);
+
+    @PutMapping("/{id}")
+    public UserEntity updateUser(@PathVariable int id, @RequestBody UserEntity userDetails) {
+        return userService.updateUser(id, userDetails);
     }
-    @DeleteMapping("/deleteuserdetails/{id}")
-    public String deleteUserDetails(@PathVariable int id) {
-        return userService.deleteUser(id);
+
+    @DeleteMapping("/{id}")
+    public void deleteUser(@PathVariable int id) {
+        userService.deleteUser(id);
     }
 }
