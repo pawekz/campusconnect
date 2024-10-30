@@ -5,6 +5,8 @@ import com.teamnullpointer.campusconnect.repository.MessageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.NoSuchElementException;
+
 @Service
 public class MessageService {
     @Autowired
@@ -19,15 +21,20 @@ public class MessageService {
     }
 
     public MessageEntity putMessageRecord(int id, MessageEntity newMessage) {
-        MessageEntity message = messageRepository.findById(id).get();
-        message.setMessage(newMessage.getMessage());
-        message.setSender(newMessage.getSender());
-        message.setReceiver(newMessage.getReceiver());
+        MessageEntity message = messageRepository.findById(id).orElseThrow(() -> new NoSuchElementException("Message with id " + id + " not found"));
+        message.setContent(newMessage.getContent());
+        message.setSender_id(newMessage.getSender_id());
+        message.setReceiver_id(newMessage.getReceiver_id());
+        message.setSent_at(newMessage.getSent_at());
         return messageRepository.save(message);
     }
 
     public String deleteMessageRecord(int id) {
-        messageRepository.deleteById(id);
-        return "Message Record Deleted";
+        if (messageRepository.findById(id).isPresent()) {
+            messageRepository.deleteById(id);
+            return "Message Record Deleted";
+        } else {
+            throw new NoSuchElementException("Message with id " + id + " not found");
+        }
     }
 }
