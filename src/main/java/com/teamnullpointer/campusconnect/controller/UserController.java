@@ -1,42 +1,39 @@
 package com.teamnullpointer.campusconnect.controller;
-
-import com.teamnullpointer.campusconnect.entity.UserEntity;
+import com.teamnullpointer.campusconnect.repository.UserRepository;
 import com.teamnullpointer.campusconnect.service.UserService;
+import com.teamnullpointer.campusconnect.entity.UserEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
+
 
 @RestController
-@RequestMapping("/users")
+@RequestMapping("/user")
 public class UserController {
 
     @Autowired
     private UserService userService;
 
-    @GetMapping
-    public List<UserEntity> getAllUsers() {
+
+    @GetMapping("/print")
+    public String print() {
+        return "User Controller";
+    }
+    @PostMapping("/postuserrecord")
+    public UserEntity postUserRecord(@RequestBody UserEntity user) {
+        return userService.postUserRecord(user);
+    }
+    @GetMapping("/getuserrecords")
+    public List<UserEntity> getUserRecords() {
         return userService.getAllUsers();
     }
-
-    @GetMapping("/{id}")
-    public Optional<UserEntity> getUserById(@PathVariable int id) {
-        return userService.getUserById(id);
+    @PutMapping("/updateuserrecord")
+    public UserRepository putUserDetails(@RequestParam int id, @RequestBody UserEntity newUserDetails){
+        return (UserRepository) userService.putUserDetails(id, newUserDetails);
     }
-
-    @PostMapping
-    public UserEntity createUser(@RequestBody UserEntity user) {
-        return userService.createUser(user);
-    }
-
-    @PutMapping("/{id}")
-    public UserEntity updateUser(@PathVariable int id, @RequestBody UserEntity userDetails) {
-        return userService.updateUser(id, userDetails);
-    }
-
-    @DeleteMapping("/{id}")
-    public void deleteUser(@PathVariable int id) {
-        userService.deleteUser(id);
+    @DeleteMapping("/deleteuserdetails/{id}")
+    public String deleteUserDetails(@PathVariable int id) {
+        return userService.deleteUser(id);
     }
 }

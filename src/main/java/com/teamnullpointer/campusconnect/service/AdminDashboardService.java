@@ -15,7 +15,7 @@ public class AdminDashboardService {
 
     public AdminDashboardEntity viewPlatformStats() {
         // Implement logic to view platform stats
-        return repository.findById(1).orElseThrow(() -> new RuntimeException("Admin Dashboard not found"));
+        return repository.findById(1).orElseThrow(() -> new RuntimeException("Admin CampusConnectDashboard not found"));
     }
 
     public void manageUsers() {

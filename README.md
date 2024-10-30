@@ -17,7 +17,7 @@ Jenelyn Mendoza<br>_
    - Simple buy/sell functionality
 - **Direct Messaging**: Basic communication between buyers and sellers
 - **Search Functionality**: Simple search to find products and services
-- **Dashboard (for admin)**:
+- **CampusConnectDashboard (for admin)**:
    - Basic overview of platform activity
    - User account management
    - Basic content moderation
