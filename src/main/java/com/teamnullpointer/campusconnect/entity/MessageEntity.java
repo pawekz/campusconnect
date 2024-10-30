@@ -4,62 +4,66 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import java.time.LocalDateTime;
+
 @Entity
 public class MessageEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    private String message;
-    private String sender;
-    private String receiver;
+    private int sender_id;
+    private int receiver_id;
+    private String content;
+    private LocalDateTime sent_at;
 
     public MessageEntity() {
     }
 
-    public MessageEntity(int id, String message, String sender, String receiver) {
+    public MessageEntity(int id, int sender_id, int receiver_id, String content, LocalDateTime sent_at) {
         this.id = id;
-        this.message = message;
-        this.sender = sender;
-        this.receiver = receiver;
+        this.sender_id = sender_id;
+        this.receiver_id = receiver_id;
+        this.content = content;
+        this.sent_at = sent_at;
     }
 
     public int getId() {
-
         return id;
     }
 
-    public String getMessage() {
-
-        return message;
-    }
-
-    public String getSender() {
-
-        return sender;
-    }
-
-    public String getReceiver() {
-
-        return receiver;
-    }
-
     public void setId(int id) {
-
         this.id = id;
     }
 
-    public void setMessage(String message) {
-
-        this.message = message;
+    public int getSender_id() {
+        return sender_id;
     }
 
-    public void setSender(String sender) {
-
-        this.sender = sender;
+    public void setSender_id(int sender_id) {
+        this.sender_id = sender_id;
     }
 
-    public void setReceiver(String receiver) {
+    public int getReceiver_id() {
+        return receiver_id;
+    }
 
-        this.receiver = receiver;
+    public void setReceiver_id(int receiver_id) {
+        this.receiver_id = receiver_id;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    public LocalDateTime getSent_at() {
+        return sent_at;
+    }
+
+    public void setSent_at(LocalDateTime sent_at) {
+        this.sent_at = sent_at;
     }
 }

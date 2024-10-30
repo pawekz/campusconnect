@@ -1,11 +1,12 @@
 package com.teamnullpointer.campusconnect.controller;
+
 import com.teamnullpointer.campusconnect.entity.MessageEntity;
 import com.teamnullpointer.campusconnect.service.MessageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping(method = RequestMethod.GET, path = "/message")
+@RequestMapping("/message")
 public class MessageController {
 
     @Autowired
