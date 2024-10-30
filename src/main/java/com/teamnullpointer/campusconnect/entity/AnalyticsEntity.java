@@ -22,34 +22,42 @@ public class AnalyticsEntity {
 
     // Getters and Setters
     public int getId() {
+
         return id;
     }
 
     public void setId(int id) {
+
         this.id = id;
     }
 
     public int getUserId() {
+
         return userId;
     }
 
     public void setUserId(int userId) {
+
         this.userId = userId;
     }
 
     public int getItemsSold() {
+
         return itemsSold;
     }
 
     public void setItemsSold(int itemsSold) {
+
         this.itemsSold = itemsSold;
     }
 
     public BigDecimal getTotalEarnings() {
+
         return totalEarnings;
     }
 
     public void setTotalEarnings(BigDecimal totalEarnings) {
+
         this.totalEarnings = totalEarnings;
     }
 }

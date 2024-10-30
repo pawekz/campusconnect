@@ -19,26 +19,32 @@ public class TransactionEntity {
 
     // Getters and Setters
     public int getId() {
+
         return id;
     }
 
     public void setId(int id) {
+
         this.id = id;
     }
 
     public UserEntity getUser() {
+
         return user;
     }
 
     public void setUser(UserEntity user) {
+
         this.user = user;
     }
 
     public String getTransactionDetails() {
+
         return transactionDetails;
     }
 
     public void setTransactionDetails(String transactionDetails) {
+
         this.transactionDetails = transactionDetails;
     }
 }

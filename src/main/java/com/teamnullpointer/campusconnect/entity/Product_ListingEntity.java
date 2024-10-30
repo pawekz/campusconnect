@@ -25,11 +25,13 @@ public class Product_ListingEntity {
 
     @PrePersist
     protected void onCreate() {
+
         createdAt = LocalDateTime.now();
     }
 
     // Getters and setters
     public int getId() {
+
         return id;
     }
 
@@ -38,50 +40,62 @@ public class Product_ListingEntity {
     }
 
     public int getUser_id() {
+
         return user_id;
     }
 
     public void setUser_id(int user_id) {
+
         this.user_id = user_id;
     }
 
     public String getProduct_title() {
+
         return product_title;
     }
 
     public void setProduct_title(String product_title) {
+
         this.product_title = product_title;
     }
 
     public String getProduct_description() {
+
         return product_description;
     }
 
     public void setProduct_description(String product_description) {
+
         this.product_description = product_description;
     }
 
     public float getPrice() {
+
         return price;
     }
 
     public void setPrice(float price) {
+
         this.price = price;
     }
 
     public String getCategory() {
+
         return category;
     }
 
     public void setCategory(String category) {
+
         this.category = category;
     }
 
     public LocalDateTime getCreatedAt() {
+
         return createdAt;
     }
 
     public void setCreatedAt(LocalDateTime createdAt) {
+
         this.createdAt = createdAt;
     }
 }

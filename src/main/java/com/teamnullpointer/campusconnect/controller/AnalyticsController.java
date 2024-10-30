@@ -15,27 +15,29 @@ public class AnalyticsController {
     private AnalyticsService service;
 
     @GetMapping("/test")
-    public String test(){
+        public String test(){
         return "You're Accessing the Analytics Controller";
     }
 
+
     @PostMapping("/updateStats")
-    public void updateStats(@RequestParam int userId, @RequestParam int itemsSold, @RequestParam BigDecimal totalEarnings) {
+        public void updateStats(@RequestParam int userId, @RequestParam int itemsSold, @RequestParam BigDecimal totalEarnings) {
         service.updateStats(userId, itemsSold, totalEarnings);
     }
 
     @GetMapping("/generateReport/{userId}")
-    public String generateReport(@PathVariable int userId) {
+        public String generateReport(@PathVariable int userId) {
         return service.generateReport(userId);
     }
 
+
     @GetMapping("/activeListing")
-    public List<?> getActiveListing() {
+        public List<?> getActiveListing() {
         return service.getActiveListing();
     }
 
     @GetMapping("/popularCategories")
-    public List<String> getPopularCategories() {
+        public List<String> getPopularCategories() {
         return service.getPopularCategories();
     }
 }

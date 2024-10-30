@@ -17,6 +17,7 @@ public class TransactionController {
 
     @GetMapping
     public List<TransactionEntity> getAllTransactions() {
+
         return transactionService.getAllTransactions();
     }
 
@@ -37,6 +38,7 @@ public class TransactionController {
 
     @DeleteMapping("/{id}")
     public void deleteTransaction(@PathVariable int id) {
+
         transactionService.deleteTransaction(id);
     }
 }

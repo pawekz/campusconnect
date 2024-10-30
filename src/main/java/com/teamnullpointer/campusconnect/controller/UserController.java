@@ -20,18 +20,22 @@ public class UserController {
     public String print() {
         return "User Controller";
     }
+
     @PostMapping("/postuserrecord")
     public UserEntity postUserRecord(@RequestBody UserEntity user) {
         return userService.postUserRecord(user);
     }
+
     @GetMapping("/getuserrecords")
     public List<UserEntity> getUserRecords() {
         return userService.getAllUsers();
     }
+
     @PutMapping("/updateuserrecord")
     public UserRepository putUserDetails(@RequestParam int id, @RequestBody UserEntity newUserDetails){
         return (UserRepository) userService.putUserDetails(id, newUserDetails);
     }
+
     @DeleteMapping("/deleteuserdetails/{id}")
     public String deleteUserDetails(@PathVariable int id) {
         return userService.deleteUser(id);
