@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
+import static com.teamnullpointer.campusconnect.controller.Product_ListingController.getProductListingEntity;
+
 @Service
 public class Product_ListingService {
 
@@ -27,13 +29,7 @@ public class Product_ListingService {
     }
 
     public Product_ListingEntity updateProduct(int id, Product_ListingEntity productDetails) {
-        Product_ListingEntity product = repository.findById(id).orElseThrow(() -> new RuntimeException("Product not found"));
-        product.setUser_id(productDetails.getUser_id());
-        product.setProduct_title(productDetails.getProduct_title());
-        product.setProduct_description(productDetails.getProduct_description());
-        product.setPrice(productDetails.getPrice());
-        product.setCategory(productDetails.getCategory());
-        return repository.save(product);
+        return getProductListingEntity(id, productDetails, repository);
     }
 
     public void deleteProduct(int id) {
