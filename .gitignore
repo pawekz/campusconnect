@@ -41,4 +41,3 @@ target
 node_modules
 venv
 campusconnect.iml
-campusconnect-react/.env
