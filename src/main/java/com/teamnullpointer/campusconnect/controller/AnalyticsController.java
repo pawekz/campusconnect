@@ -8,7 +8,7 @@ import java.math.BigDecimal;
 import java.util.List;
 
 @RestController
-@RequestMapping("/analytics")
+@RequestMapping("/API/analytics")
 public class AnalyticsController {
 
     @Autowired
