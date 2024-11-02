@@ -1,7 +1,7 @@
 package com.teamnullpointer.campusconnect.controller;
 
 import com.teamnullpointer.campusconnect.entity.Product_ListingEntity;
-import com.teamnullpointer.campusconnect.repository.Product_ListingRepository;
+import com.teamnullpointer.campusconnect.service.Product_ListingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -10,43 +10,33 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/products")
-public class    Product_ListingController {
+public class Product_ListingController {
 
     @Autowired
-    private Product_ListingRepository repository;
+    private Product_ListingService service;
 
     @GetMapping
     public List<Product_ListingEntity> getAllProducts() {
-        return repository.findAll();
+        return service.getAllProducts();
     }
 
     @GetMapping("/{id}")
     public Optional<Product_ListingEntity> getProductById(@PathVariable int id) {
-        return repository.findById(id);
+        return service.getProductById(id);
     }
 
     @PostMapping
     public Product_ListingEntity createProduct(@RequestBody Product_ListingEntity product) {
-        return repository.save(product);
+        return service.createProduct(product);
     }
 
-    @PutMapping(value = "/{id}")
+    @PutMapping("/{id}")
     public Product_ListingEntity updateProduct(@PathVariable int id, @RequestBody Product_ListingEntity productDetails) {
-        return getProductListingEntity(id, productDetails, repository);
-    }
-
-    public static Product_ListingEntity getProductListingEntity(@PathVariable int id, @RequestBody Product_ListingEntity productDetails, Product_ListingRepository repository) {
-        Product_ListingEntity product = repository.findById(id).orElseThrow(() -> new RuntimeException("Product not found"));
-        product.setUser_id(productDetails.getUser_id());
-        product.setProduct_title(productDetails.getProduct_title());
-        product.setProduct_description(productDetails.getProduct_description());
-        product.setPrice(productDetails.getPrice());
-        product.setCategory(productDetails.getCategory());
-        return repository.save(product);
+        return service.updateProductDetails(id, productDetails);
     }
 
     @DeleteMapping("/{id}")
     public void deleteProduct(@PathVariable int id) {
-        repository.deleteById(id);
+        service.deleteProduct(id);
     }
 }
