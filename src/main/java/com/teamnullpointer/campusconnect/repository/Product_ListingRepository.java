@@ -6,6 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface Product_ListingRepository extends JpaRepository<Product_ListingEntity, Integer> {
-
-
+    // Additional query methods can be defined here if needed
 }
