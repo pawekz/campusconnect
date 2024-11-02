@@ -13,7 +13,7 @@ public class TransactionEntity {
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
-    private UserEntity user;
+    private AppUserEntity user;
 
     private String transactionDetails;
 
@@ -26,11 +26,11 @@ public class TransactionEntity {
         this.id = id;
     }
 
-    public UserEntity getUser() {
+    public AppUserEntity getUser() {
         return user;
     }
 
-    public void setUser(UserEntity user) {
+    public void setUser(AppUserEntity user) {
         this.user = user;
     }
 
