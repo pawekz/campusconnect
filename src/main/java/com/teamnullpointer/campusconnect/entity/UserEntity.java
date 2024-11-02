@@ -1,31 +1,26 @@
 package com.teamnullpointer.campusconnect.entity;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 
 @Entity
-@Table(name = "user")
-public class AppUserEntity {
+public class UserEntity {
     @Id
-    @Column(name = "user_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-
-    @Column(name = "email", length = 100)
     private String email;
+    private String password;
+    private String name;
+    private String user_type;
 
-    @Column(name = "password", length = 255)
-    private String password; //this serves as the `username`
-
-    @Column (name = "name", length = 128)
-    private String name; //name of the Student or Admin
-
-    @Column(name = "user_type", length = 32)
-    private String user_type; //name of the user type (Student or Admin)
-
-    public AppUserEntity() {
+    public UserEntity() {
+        super();
     }
 
-    public AppUserEntity(int id, String email, String password, String name, String user_type) {
+    public UserEntity(int id, String email, String password, String name, String user_type) {
+        super();
         this.id = id;
         this.email = email;
         this.password = password;
@@ -71,16 +66,5 @@ public class AppUserEntity {
 
     public void setUser_type(String user_type) {
         this.user_type = user_type;
-    }
-
-    @Override
-    public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", email='" + email + '\'' +
-                ", password='" + password + '\'' +
-                ", name='" + name + '\'' +
-                ", user_type='" + user_type + '\'' +
-                '}';
     }
 }
