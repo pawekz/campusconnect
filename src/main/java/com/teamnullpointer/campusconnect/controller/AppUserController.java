@@ -2,6 +2,7 @@ package com.teamnullpointer.campusconnect.controller;
 
 import com.teamnullpointer.campusconnect.DTO.AppUserDTO;
 import com.teamnullpointer.campusconnect.DTO.LoginDTO;
+import com.teamnullpointer.campusconnect.entity.AppUserEntity;
 import com.teamnullpointer.campusconnect.response.LoginResponse;
 import com.teamnullpointer.campusconnect.service.AppUserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,10 +28,15 @@ public class AppUserController {
     }
 
     @PostMapping(path = "/login")
-    public ResponseEntity<?> loginAppUser(@RequestBody LoginDTO loginDTO){
+    public ResponseEntity<?> loginAppUser(@RequestBody LoginDTO loginDTO) {
         LoginResponse loginResponse = appUserService.loginAppUser(loginDTO);
         return ResponseEntity.ok(loginResponse);
     }
+    @PutMapping("/updateuserrecord")
+    public AppUserEntity putUserDetails(@RequestParam int id, @RequestBody AppUserEntity newUserDetails) {
+        return AppUserService.putAppUserDetails(id, newUserDetails);
+    }
+
 
 
 
@@ -45,10 +51,6 @@ public class AppUserController {
         return userService.getAllUsers();
     }
 
-    @PutMapping("/updateuserrecord")
-    public UserEntity putUserDetails(@RequestParam int id, @RequestBody UserEntity newUserDetails) {
-        return userService.putUserDetails(id, newUserDetails);
-    }
 
     @DeleteMapping("/deleteuserdetails/{id}")
     public String deleteUserDetails(@PathVariable int id) {
