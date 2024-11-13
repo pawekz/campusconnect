@@ -1,7 +1,10 @@
 package com.teamnullpointer.campusconnect.entity;
 
+import com.teamnullpointer.campusconnect.DTO.CategoryCountDTO;
 import jakarta.persistence.*;
+
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "admindashboard", schema = "campusconnect")
@@ -36,11 +39,20 @@ public class AdminDashboardEntity {
         this.activeListing = activeListing;
     }
 
-    public List<String> getPopularCategories() {
-        return popularCategories;
+    public List<CategoryCountDTO> getPopularCategoriesWithCount() {
+        return popularCategories.stream()
+                .map(category -> {
+                    String[] parts = category.split(" \\(");
+                    String name = parts[0];
+                    int count = Integer.parseInt(parts[1].replace(")", ""));
+                    return new CategoryCountDTO(name, count);
+                })
+                .collect(Collectors.toList());
     }
 
-    public void setPopularCategories(List<String> popularCategories) {
-        this.popularCategories = popularCategories;
+    public void setPopularCategoriesWithCount(List<CategoryCountDTO> popularCategoriesWithCount) {
+        this.popularCategories = popularCategoriesWithCount.stream()
+                .map(categoryCountDTO -> categoryCountDTO.getCategory() + " (" + categoryCountDTO.getCount() + ")")
+                .collect(Collectors.toList());
     }
 }
