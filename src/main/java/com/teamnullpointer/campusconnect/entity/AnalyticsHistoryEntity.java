@@ -1,25 +1,26 @@
 package com.teamnullpointer.campusconnect.entity;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "analytics", schema = "campusconnect")
-public class AnalyticsEntity {
+public class AnalyticsHistoryEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(name = "user_id")
     private int userId;
-
-    @Column(name = "items_sold")
     private int itemsSold;
-
-    @Column(name = "total_earnings")
     private BigDecimal totalEarnings;
+    private LocalDateTime timestamp;
+
+    // Getters and setters
 
 
     public int getId() {
@@ -52,5 +53,13 @@ public class AnalyticsEntity {
 
     public void setTotalEarnings(BigDecimal totalEarnings) {
         this.totalEarnings = totalEarnings;
+    }
+
+    public LocalDateTime getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(LocalDateTime timestamp) {
+        this.timestamp = timestamp;
     }
 }
