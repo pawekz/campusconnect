@@ -56,5 +56,3 @@ public class AppUserDTO implements Serializable {
                 "user_type = " + user_type + ")";
     }
 }
-
-//reupload
