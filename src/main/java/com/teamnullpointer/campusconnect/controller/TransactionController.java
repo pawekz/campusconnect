@@ -1,5 +1,6 @@
 package com.teamnullpointer.campusconnect.controller;
 
+import com.teamnullpointer.campusconnect.DTO.TransactionRequestDTO;
 import com.teamnullpointer.campusconnect.entity.TransactionEntity;
 import com.teamnullpointer.campusconnect.service.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,8 +27,8 @@ public class TransactionController {
     }
 
     @PostMapping
-    public TransactionEntity createTransaction(@RequestBody TransactionEntity transaction) {
-        return transactionService.createTransaction(transaction);
+    public TransactionEntity createTransaction(@RequestBody TransactionRequestDTO transactionRequestDTO) {
+        return transactionService.createTransaction(transactionRequestDTO);
     }
 
     @PutMapping("/{id}")

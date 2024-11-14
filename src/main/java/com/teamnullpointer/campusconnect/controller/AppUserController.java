@@ -2,10 +2,12 @@ package com.teamnullpointer.campusconnect.controller;
 
 import com.teamnullpointer.campusconnect.DTO.AppUserDTO;
 import com.teamnullpointer.campusconnect.DTO.LoginDTO;
-import com.teamnullpointer.campusconnect.entity.AppUserEntity;
+import com.teamnullpointer.campusconnect.response.JwtResponse;
 import com.teamnullpointer.campusconnect.response.LoginResponse;
 import com.teamnullpointer.campusconnect.service.AppUserService;
+import com.teamnullpointer.campusconnect.util.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,13 +32,13 @@ public class AppUserController {
     @PostMapping(path = "/login")
     public ResponseEntity<?> loginAppUser(@RequestBody LoginDTO loginDTO) {
         LoginResponse loginResponse = appUserService.loginAppUser(loginDTO);
-        return ResponseEntity.ok(loginResponse);
+        if (loginResponse.isSuccess()) {
+            String token = JwtUtil.generateToken(loginDTO.getEmail());
+            return ResponseEntity.ok(new JwtResponse(token));
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
+        }
     }
-    @PutMapping("/updateuserrecord")
-    public AppUserEntity putUserDetails(@RequestParam int id, @RequestBody AppUserEntity newUserDetails) {
-        return AppUserService.putAppUserDetails(id, newUserDetails);
-    }
-
 
 
 
@@ -51,6 +53,10 @@ public class AppUserController {
         return userService.getAllUsers();
     }
 
+    @PutMapping("/updateuserrecord")
+    public UserEntity putUserDetails(@RequestParam int id, @RequestBody UserEntity newUserDetails) {
+        return userService.putUserDetails(id, newUserDetails);
+    }
 
     @DeleteMapping("/deleteuserdetails/{id}")
     public String deleteUserDetails(@PathVariable int id) {

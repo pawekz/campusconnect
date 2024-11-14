@@ -7,10 +7,12 @@ import com.teamnullpointer.campusconnect.repository.AppUserRepository;
 import com.teamnullpointer.campusconnect.response.LoginResponse;
 import com.teamnullpointer.campusconnect.service.AppUserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-@Service
+@Service("appUserService")
 public class AppUserIMPL implements AppUserService {
 
     @Autowired
@@ -49,4 +51,33 @@ public class AppUserIMPL implements AppUserService {
             return new LoginResponse("Institution email not found", false);
         }
     }
+
+    @Override
+    public Page<AppUserDTO> getAllUsersWithPagination(Pageable pageable) {
+        Page<AppUserEntity> users = appUserRepository.findByUserType("STUDENT", pageable);
+        return users.map(user -> new AppUserDTO(
+                user.getId(),
+                user.getEmail(),
+                null,
+                user.getName(),
+                user.getUserType()
+        ));
+    }
+
+
+    @Override
+    public void deleteUser(int userId) {
+        appUserRepository.deleteById(userId);
+    }
+
+    @Override
+    public void deleteUser(Long userId) {
+        appUserRepository.deleteById(Math.toIntExact(userId));
+    }
+
+
+/*    @Override
+    public void deleteUser(int userId) {
+        appUserRepository.deleteById(userId);
+    }*/
 }

@@ -1,6 +1,9 @@
 package com.teamnullpointer.campusconnect.service;
 
+import com.teamnullpointer.campusconnect.DTO.TransactionRequestDTO;
+import com.teamnullpointer.campusconnect.entity.AppUserEntity;
 import com.teamnullpointer.campusconnect.entity.TransactionEntity;
+import com.teamnullpointer.campusconnect.repository.AppUserRepository;
 import com.teamnullpointer.campusconnect.repository.TransactionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,6 +17,9 @@ public class TransactionService {
     @Autowired
     private TransactionRepository transactionRepository;
 
+    @Autowired
+    private AppUserRepository appUserRepository;
+
     public List<TransactionEntity> getAllTransactions() {
         return transactionRepository.findAll();
     }
@@ -22,9 +28,17 @@ public class TransactionService {
         return transactionRepository.findById(id);
     }
 
-    public TransactionEntity createTransaction(TransactionEntity transaction) {
+    public TransactionEntity createTransaction(TransactionRequestDTO transactionRequestDTO) {
+        AppUserEntity user = appUserRepository.findById(transactionRequestDTO.getUserId())
+                .orElseThrow(() -> new RuntimeException("User with ID " + transactionRequestDTO.getUserId() + " not found"));
+
+        TransactionEntity transaction = new TransactionEntity();
+        transaction.setUser(user);
+        transaction.setTransactionDetails(transactionRequestDTO.getTransactionDetails());
+
         return transactionRepository.save(transaction);
     }
+
     public TransactionEntity updateTransaction(int id, TransactionEntity transactionDetails) {
         TransactionEntity transaction = transactionRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Transaction not found"));

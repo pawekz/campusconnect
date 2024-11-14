@@ -32,4 +32,8 @@ public class LoginResponse {
                 ", status=" + status +
                 '}';
     }
+
+    public boolean isSuccess() {
+        return status;
+    }
 }

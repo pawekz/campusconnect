@@ -2,6 +2,8 @@ package com.teamnullpointer.campusconnect.entity;
 
 import jakarta.persistence.*;
 
+import java.util.List;
+
 @Entity
 @Table(name = "user")
 public class AppUserEntity {
@@ -14,25 +16,30 @@ public class AppUserEntity {
     private String email;
 
     @Column(name = "password", length = 255)
-    private String password; //this serves as the `username`
+    private String password;
 
-    @Column (name = "name", length = 128)
-    private String name; //name of the Student or Admin
+    @Column(name = "name", length = 128)
+    private String name;
 
     @Column(name = "user_type", length = 32)
-    private String user_type; //name of the user type (Student or Admin)
+    private String userType;
 
-    public AppUserEntity() {
-    }
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<TransactionEntity> transactions;
 
-    public AppUserEntity(int id, String email, String password, String name, String user_type) {
+    public AppUserEntity(int id, String email, String encode, String name, String userType) {
         this.id = id;
         this.email = email;
-        this.password = password;
+        this.password = encode;
         this.name = name;
-        this.user_type = user_type;
+        this.userType = userType;
     }
 
+    public AppUserEntity() {
+
+    }
+
+    // Getters and Setters
     public int getId() {
         return id;
     }
@@ -65,22 +72,19 @@ public class AppUserEntity {
         this.name = name;
     }
 
-    public String getUser_type() {
-        return user_type;
+    public String getUserType() {
+        return userType;
     }
 
-    public void setUser_type(String user_type) {
-        this.user_type = user_type;
+    public void setUserType(String userType) {
+        this.userType = userType;
     }
 
-    @Override
-    public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", email='" + email + '\'' +
-                ", password='" + password + '\'' +
-                ", name='" + name + '\'' +
-                ", user_type='" + user_type + '\'' +
-                '}';
+    public List<TransactionEntity> getTransactions() {
+        return transactions;
+    }
+
+    public void setTransactions(List<TransactionEntity> transactions) {
+        this.transactions = transactions;
     }
 }

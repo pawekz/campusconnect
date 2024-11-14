@@ -18,6 +18,7 @@ target/
 *.iws
 *.iml
 *.ipr
+.ideabak
 
 ### NetBeans ###
 /nbproject/private/
@@ -41,3 +42,5 @@ target
 node_modules
 venv
 campusconnect.iml
+.codebuddy
+.mvn
