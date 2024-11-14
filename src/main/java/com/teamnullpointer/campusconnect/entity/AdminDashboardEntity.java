@@ -24,18 +24,22 @@ public class AdminDashboardEntity {
 
     // Getters and Setters
     public int getId() {
+
         return id;
     }
 
     public void setId(int id) {
+
         this.id = id;
     }
 
     public int getActiveListing() {
+
         return activeListing;
     }
 
     public void setActiveListing(int activeListing) {
+
         this.activeListing = activeListing;
     }
 

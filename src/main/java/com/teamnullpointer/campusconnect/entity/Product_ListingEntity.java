@@ -27,6 +27,17 @@ public class Product_ListingEntity {
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
+    @Column(name = "image")
+    private String image;
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
     @PrePersist
     protected void onCreate() {
         createdAt = LocalDateTime.now();
