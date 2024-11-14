@@ -1,14 +1,16 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-/*import HelloWorld from "./HelloWorld.jsx";*/
-import AppBar from "./components/dashboard/components/appbar/CampusConnectAppBar.jsx";
-import CampusConnectDashboard from "./components/dashboard/CampusConnectDashboard.jsx";
+import React from 'react';
+import { Route, Routes } from 'react-router-dom';
+import CampusConnectDashboard from './components/dashboard/CampusConnectDashboard.jsx';
+import AddProduct from './components/Product_Listing/AddProduct.jsx';
+import ViewProducts from './components/Product_Listing/ViewProducts.jsx';
 
 function App() {
     return (
-        <div className="HelloWorld">
-            <CampusConnectDashboard />
-        </div>
+        <Routes>
+            <Route path="/" element={<CampusConnectDashboard />} />
+            <Route path="/addproduct" element={<AddProduct />} />
+            <Route path="/viewproducts" element={<ViewProducts />} />
+        </Routes>
     );
 }
 

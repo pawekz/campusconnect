@@ -4,6 +4,7 @@ import com.teamnullpointer.campusconnect.entity.Product_ListingEntity;
 import com.teamnullpointer.campusconnect.service.Product_ListingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Optional;
@@ -30,7 +31,12 @@ public class Product_ListingController {
         return service.createProduct(product);
     }
 
-    @PutMapping("/{id}")
+    @PostMapping("/uploadImage")
+    public String uploadImage(@RequestParam("file") MultipartFile file) {
+        return service.uploadImage(file);
+    }
+
+    @PutMapping("/updateProduct/{id}")
     public Product_ListingEntity updateProduct(@PathVariable int id, @RequestBody Product_ListingEntity productDetails) {
         return service.updateProductDetails(id, productDetails);
     }
