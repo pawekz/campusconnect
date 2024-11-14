@@ -2,9 +2,12 @@ package com.teamnullpointer.campusconnect.controller;
 
 import com.teamnullpointer.campusconnect.DTO.AppUserDTO;
 import com.teamnullpointer.campusconnect.DTO.LoginDTO;
+import com.teamnullpointer.campusconnect.response.JwtResponse;
 import com.teamnullpointer.campusconnect.response.LoginResponse;
 import com.teamnullpointer.campusconnect.service.AppUserService;
+import com.teamnullpointer.campusconnect.util.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,9 +30,14 @@ public class AppUserController {
     }
 
     @PostMapping(path = "/login")
-    public ResponseEntity<?> loginAppUser(@RequestBody LoginDTO loginDTO){
+    public ResponseEntity<?> loginAppUser(@RequestBody LoginDTO loginDTO) {
         LoginResponse loginResponse = appUserService.loginAppUser(loginDTO);
-        return ResponseEntity.ok(loginResponse);
+        if (loginResponse.isSuccess()) {
+            String token = JwtUtil.generateToken(loginDTO.getEmail());
+            return ResponseEntity.ok(new JwtResponse(token));
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
+        }
     }
 
 
