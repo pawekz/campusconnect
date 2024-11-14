@@ -2,7 +2,6 @@ package com.teamnullpointer.campusconnect.entity;
 
 import jakarta.persistence.*;
 
-
 @Entity
 @Table(name = "transactions")
 public class TransactionEntity {
@@ -12,7 +11,7 @@ public class TransactionEntity {
     private int id;
 
     @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "user_id", referencedColumnName = "user_id")
     private AppUserEntity user;
 
     private String transactionDetails;
