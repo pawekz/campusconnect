@@ -1,5 +1,6 @@
 package com.teamnullpointer.campusconnect.service;
 
+import com.teamnullpointer.campusconnect.DTO.AppUserDTO;
 import com.teamnullpointer.campusconnect.DTO.CategoryCountDTO;
 import com.teamnullpointer.campusconnect.DTO.PlatformStatsDTO;
 import com.teamnullpointer.campusconnect.entity.AdminDashboardEntity;
@@ -7,6 +8,10 @@ import com.teamnullpointer.campusconnect.repository.AdminDashboardRepository;
 import com.teamnullpointer.campusconnect.repository.AppUserRepository;
 import com.teamnullpointer.campusconnect.repository.TransactionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,9 +25,13 @@ public class AdminDashboardService {
     @Autowired
     private AppUserRepository appUserRepository;
 
+
+
     @Autowired
     private TransactionRepository transactionRepository;
-
+    @Autowired
+    @Qualifier("appUserService")
+    private AppUserService appUserService;
     public PlatformStatsDTO viewPlatformStats() {
         List<AdminDashboardEntity> adminDashboardEntities = adminDashboardRepository.findAll();
         AdminDashboardEntity entity = adminDashboardEntities.get(0);
@@ -42,7 +51,11 @@ public class AdminDashboardService {
     }
 
     public void manageUsers() {
-        // Implement logic to manage users
+
+    }
+    public Page<AppUserDTO> getUsers(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return appUserService.getAllUsersWithPagination(pageable);
     }
 
     public void moderateContent() {

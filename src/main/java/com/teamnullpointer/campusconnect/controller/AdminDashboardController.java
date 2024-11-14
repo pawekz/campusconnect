@@ -1,12 +1,15 @@
 package com.teamnullpointer.campusconnect.controller;
 
+import com.teamnullpointer.campusconnect.DTO.AppUserDTO;
 import com.teamnullpointer.campusconnect.DTO.PlatformStatsDTO;
 import com.teamnullpointer.campusconnect.service.AdminDashboardService;
+import com.teamnullpointer.campusconnect.service.AppUserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/admindashboard")
@@ -14,6 +17,9 @@ public class AdminDashboardController {
 
     @Autowired
     private AdminDashboardService service;
+
+    @Autowired
+    AppUserService appUserService;
 
     @GetMapping("/test")
     public String test(){
@@ -25,9 +31,17 @@ public class AdminDashboardController {
         return service.viewPlatformStats();
     }
 
-    @PostMapping("/manageUsers")
-    public void manageUsers() {
-        service.manageUsers();
+@PostMapping("/manageUsers")
+public ResponseEntity<Page<AppUserDTO>> manageUsers(
+        @RequestParam(defaultValue = "0") int page,
+        @RequestParam(defaultValue = "10") int size) {
+    return ResponseEntity.ok(service.getUsers(page, size));
+}
+
+    @DeleteMapping("/manageUsers/{userId}")
+    public ResponseEntity<String> deleteUserById(@PathVariable Long userId) {
+        appUserService.deleteUser(userId);
+        return ResponseEntity.ok("User successfully deleted");
     }
 
     @PostMapping("/moderateContent")
