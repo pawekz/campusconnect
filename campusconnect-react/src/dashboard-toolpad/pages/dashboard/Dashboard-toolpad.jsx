@@ -6,13 +6,16 @@ import Typography from '@mui/material/Typography';
 import { createTheme } from '@mui/material/styles';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import BarChartIcon from '@mui/icons-material/BarChart';
+import PeopleIcon from '@mui/icons-material/People';
 import DescriptionIcon from '@mui/icons-material/Description';
 import { AppProvider } from '@toolpad/core/AppProvider';
 import { useDemoRouter } from '@toolpad/core/internal';
 import { DashboardLayout } from '@toolpad/core/DashboardLayout';
-import Dashboard from './pages/dashboard/Dashboard.jsx'
-import Analytics from './pages/analytics/Analytics.jsx'
+import Dashboard from './Dashboard.jsx'
+import Analytics from '../analytics/Analytics.jsx'
 import AnalyticsRoundedIcon from "@mui/icons-material/AnalyticsRounded";
+import ManageUser from './users/ManageUser.jsx'
+import Account from "../../../components/authentication/Account.jsx";
 
 const NAVIGATION = [
     {
@@ -24,6 +27,12 @@ const NAVIGATION = [
         title: 'Dashboard',
         icon: <DashboardIcon />,
         component: Dashboard
+    },
+    {
+        segment: 'dashboard/users',
+        title: 'User Management',
+        icon: <PeopleIcon />,
+        component: ManageUser
     },
     {
         kind: 'divider',
@@ -96,13 +105,51 @@ SidebarFooter.propTypes = {
 
 function DashboardLayoutBasic({ children }) {
     const router = useDemoRouter('/dashboard');
+    const [session, setSession] = React.useState(() => {
+        const token = localStorage.getItem('token');
+        if (token) {
+            const decoded = jwt_decode(token);
+            return {
+                user: {
+                    name: decoded.name,
+                    email: decoded.email,
+                    image: decoded.image || '/default-avatar.png',
+                }
+            };
+        }
+        return null;
+    });
+
+    const authentication = React.useMemo(() => ({
+        signIn: (userData) => {
+            setSession({
+                user: {
+                    name: userData.name,
+                    email: userData.email,
+                    image: userData.image || '/default-avatar.png',
+                },
+            });
+        },
+        signOut: () => {
+            localStorage.removeItem('token');
+            setSession(null);
+            router.push('/login');
+        },
+    }), [router]);
+
     const pathSegments = router.pathname.split('/');
     const currentSegment = pathSegments[pathSegments.length - 1] || 'dashboard';
 
+    console.log('Current Route State',{
+        pathname: router.pathname,
+        currentSegment: pathSegments[pathSegments.length -1]
+    });
+
     const getCurrentComponent = () => {
-        // First check main navigation
+        console.log('Navigation config:', NAVIGATION);
         const mainRoute = NAVIGATION.find(item => item.segment === currentSegment);
-        if (mainRoute?.component) return mainRoute.component;
+        console.log('Found route:', mainRoute);
+        return mainRoute?.component;
 
         // Then check nested routes
         for (const item of NAVIGATION) {
@@ -118,6 +165,8 @@ function DashboardLayoutBasic({ children }) {
 
     return (
         <AppProvider
+            session={session}
+            authentication={authentication}
             navigation={NAVIGATION}
             branding={{
                 logo: <img src="/campus_connect_icon.png" alt="Campus Connect Logo" />,
@@ -125,6 +174,7 @@ function DashboardLayoutBasic({ children }) {
             }}
             router={router}
             theme={demoTheme}
+            topComponents={[<Account key="account" />]}
         >
             <DashboardLayout>
                 {CurrentComponent ? <CurrentComponent /> : children}
@@ -132,7 +182,6 @@ function DashboardLayoutBasic({ children }) {
         </AppProvider>
     );
 }
-
 DashboardLayoutBasic.propTypes = {
     children: PropTypes.node,
 };
