@@ -43,9 +43,7 @@ public class AdminDashboardEntity {
         this.activeListing = activeListing;
     }
 
-    public List<String> getPopularCategories() {
 
-        return popularCategories;
     public List<CategoryCountDTO> getPopularCategoriesWithCount() {
         return popularCategories.stream()
                 .map(category -> {
@@ -57,9 +55,7 @@ public class AdminDashboardEntity {
                 .collect(Collectors.toList());
     }
 
-    public void setPopularCategories(List<String> popularCategories) {
 
-        this.popularCategories = popularCategories;
     public void setPopularCategoriesWithCount(List<CategoryCountDTO> popularCategoriesWithCount) {
         this.popularCategories = popularCategoriesWithCount.stream()
                 .map(categoryCountDTO -> categoryCountDTO.getCategory() + " (" + categoryCountDTO.getCount() + ")")
