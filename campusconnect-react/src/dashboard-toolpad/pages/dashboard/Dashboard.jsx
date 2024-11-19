@@ -3,6 +3,8 @@ import { PageContainer } from '@toolpad/core';
 import { Box, Card, Typography } from '@mui/material';
 import { PieChart } from '@mui/x-charts/PieChart';
 import axios from 'axios';
+import { Link } from '@mui/material'
+import ManageUser from './users/ManageUser.jsx'
 
 function Dashboard() {
     const [stats, setStats] = useState({
@@ -29,12 +31,24 @@ function Dashboard() {
         <PageContainer
             title="Dashboard"
             breadcrumbs={[
-                { label: 'Home', href: '/dashboard' },
-                { label: 'Dashboard' }
+                { label: 'Home', path: '/dashboard' },
+                { label: 'Dashboard', path: '/dashboard' }
             ]}
         >
             <Box sx={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 2, mb: 4 }}>
-                <Card sx={{ p: 2 }}>
+                <Card
+                    component={Link}
+                    href="/users"  // Direct route to users management
+                    sx={{
+                        p: 2,
+                        textDecoration: 'none',
+                        color: 'inherit',
+                        '&:hover': {
+                            cursor: 'pointer',
+                            bgcolor: 'action.hover'
+                        }
+                    }}
+                >
                     <Typography variant="h6">Users</Typography>
                     <Typography>Total Number: {stats.totalUsers}</Typography>
                 </Card>
@@ -65,6 +79,7 @@ function Dashboard() {
                     />
                 </Box>
             </Card>
+            <ManageUser />
         </PageContainer>
     );
 }
