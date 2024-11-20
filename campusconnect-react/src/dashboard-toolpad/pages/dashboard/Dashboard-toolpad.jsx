@@ -103,22 +103,25 @@ SidebarFooter.propTypes = {
     mini: PropTypes.bool.isRequired,
 };
 
-function DashboardLayoutBasic({ children }) {
+function DashboardLayoutBasic() {
     const router = useDemoRouter('/dashboard');
     const [session, setSession] = React.useState(() => {
         const token = localStorage.getItem('token');
         if (token) {
-            const decoded = jwt_decode(token);
             return {
                 user: {
-                    name: decoded.name,
-                    email: decoded.email,
-                    image: decoded.image || '/default-avatar.png',
+                    token: token
                 }
             };
         }
         return null;
     });
+
+    React.useEffect(() => {
+        if (!localStorage.getItem('token')) {
+            router.push('/');  // Redirect to Homepage if no token
+        }
+    }, []);
 
     const authentication = React.useMemo(() => ({
         signIn: (userData) => {
@@ -135,34 +138,29 @@ function DashboardLayoutBasic({ children }) {
             setSession(null);
             router.push('/login');
         },
-    }), [router]);
+    }), [router, setSession]);
 
     const pathSegments = router.pathname.split('/');
     const currentSegment = pathSegments[pathSegments.length - 1] || 'dashboard';
 
-    console.log('Current Route State',{
-        pathname: router.pathname,
-        currentSegment: pathSegments[pathSegments.length -1]
-    });
-
     const getCurrentComponent = () => {
-        console.log('Navigation config:', NAVIGATION);
         const mainRoute = NAVIGATION.find(item => item.segment === currentSegment);
-        console.log('Found route:', mainRoute);
-        return mainRoute?.component;
-
-        // Then check nested routes
-        for (const item of NAVIGATION) {
-            if (item.children) {
-                const childRoute = item.children.find(child => child.segment === currentSegment);
-                if (childRoute?.component) return childRoute.component;
-            }
+        if (mainRoute?.component) {
+            return mainRoute.component;
         }
-        return null;
+
+        const nestedRoute = NAVIGATION.reduce((found, item) => {
+            if (found) return found;
+            if (item.children) {
+                return item.children.find(child => child.segment === currentSegment);
+            }
+            return null;
+        }, null);
+
+        return nestedRoute?.component || null;
     };
 
     const CurrentComponent = getCurrentComponent();
-
     return (
         <AppProvider
             session={session}

@@ -14,12 +14,16 @@ function Dashboard() {
         popularCategoriesWithCount: []
     });
 
+
     useEffect(() => {
-        axios.get('http://localhost:8080/api/admindashboard/viewPlatformStats')
+        const token = localStorage.getItem('token');
+        // Token automatically included in headers
+        axios.get('http://localhost:8080/API/admindashboard/viewPlatformStats')
             .then(response => {
                 setStats(response.data);
             });
     }, []);
+
 
     const pieChartData = stats.popularCategoriesWithCount.map(item => ({
         id: item.category,
@@ -83,5 +87,6 @@ function Dashboard() {
         </PageContainer>
     );
 }
+
 
 export default Dashboard;

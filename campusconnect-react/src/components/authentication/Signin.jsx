@@ -6,74 +6,46 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
 const providers = [{ id: 'credentials', name: 'Email and Password' }];
+
 const signIn = async (provider, formData) => {
     try {
-        console.table({
-            email: formData.get('email'),
-            password: formData.get('password')
-        });
-
         const response = await axios.post('http://localhost:8080/user/login', {
             email: formData.get('email'),
             password: formData.get('password')
         });
 
         console.table({
-            responseStatus: response.status,
-            token: response.data.token,
-            fullResponse: response.data
+            'Response Status': response.status,
+            'Response Data': response.data
         });
 
-        if (response.data.token) {
-            localStorage.setItem('token', response.data.token);
+        if (response.status === 200 && response.data.token) {
+            const token = response.data.token;
+            localStorage.setItem('token', token);
+            axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+            console.log('Token stored in localStorage:', localStorage.getItem('token'));
             return true;
         }
-        return false;
     } catch (error) {
-        console.table({
-            error: error.message,
-            response: error.response?.data
-        });
-        throw new Error('Invalid credentials');
+        console.error('Authentication failed:', error);
     }
-};
-
-const handleSignIn = async (provider, formData) => {
-    try {
-        const success = await signIn(provider, formData);
-        console.table({
-            signInSuccess: success,
-            currentToken: localStorage.getItem('token')
-        });
-
-        if (success) {
-            navigate('/dashboard-toolpad');
-        }
-    } catch (error) {
-        console.table({
-            signInError: error.message
-        });
-    }
-};
-
-const handleSignOut = () => {
-    localStorage.removeItem('token');
-    navigate('/login');
-};
+    return false;
+}
 
 export default function CredentialsSignInPage() {
     const theme = useTheme();
     const navigate = useNavigate();
+
     const handleSignIn = async (provider, formData) => {
-        try {
-            const success = await signIn(provider, formData);
-            if (success && localStorage.getItem('token')) {
-                navigate('/dashboard-toolpad', {replace: true});  // Redirects to Dashboard-toolpad.jsx
-            }
-        } catch (error) {
-            console.table({
-                signInError: error.message
-            });
+        const success = await signIn(provider, formData);
+        console.table({
+            'Sign In Success': success
+        });
+        if (success) {
+            console.log('Navigating to /dashboard-toolpad');
+            navigate('/dashboard-toolpad', { replace: true });
+        } else {
+            console.error('Sign in failed, not navigating');
         }
     };
 
@@ -83,4 +55,3 @@ export default function CredentialsSignInPage() {
         </AppProvider>
     );
 }
-
