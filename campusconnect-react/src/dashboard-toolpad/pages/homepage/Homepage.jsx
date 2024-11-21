@@ -2,9 +2,11 @@ import React from 'react';
 import { Box, Button, AppBar, Toolbar, Typography, Container, } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import { useNavigate } from 'react-router-dom';
+import {PageContainer} from "@toolpad/core/PageContainer";
 
 export default function Homepage() {
     const navigate = useNavigate();
+
     return (
         <Box sx={{ position: 'relative' }}>
             <Box sx={{
@@ -34,7 +36,7 @@ export default function Homepage() {
                     </Typography>
                     <Button
                         color="primary"
-                        onClick={() => navigate('/signin')}
+                        onClick={() => navigate('/signin2')}
                         sx={{ mx: 1 }}
                     >
                         Sign In
@@ -42,7 +44,7 @@ export default function Homepage() {
                     <Button
                         variant="contained"
                         color="primary"
-                        onClick={() => navigate('/register')}
+                        onClick={() => navigate('/register')} //changed from `/register` to `/register2`
                     >
                         Register
                     </Button>

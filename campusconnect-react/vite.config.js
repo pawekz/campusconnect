@@ -13,4 +13,5 @@ export default defineConfig({
             // Add other paths as needed
         },
     },
+
 })
