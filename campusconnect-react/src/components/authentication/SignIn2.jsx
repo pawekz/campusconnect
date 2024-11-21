@@ -206,7 +206,7 @@ export default function SignIn2(props) {
               Don&apos;t have an account?{' '}
               <span>
                 <Link
-                    onClick={() => navigate('/signup')}
+                    onClick={() => navigate('/register')}
                     variant="body2"
                     sx={{
                       alignSelf: 'center',

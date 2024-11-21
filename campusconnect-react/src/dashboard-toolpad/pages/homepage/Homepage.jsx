@@ -36,7 +36,7 @@ export default function Homepage() {
                     </Typography>
                     <Button
                         color="primary"
-                        onClick={() => navigate('/signin2')}
+                        onClick={() => navigate('/signin')}
                         sx={{ mx: 1 }}
                     >
                         Sign In
