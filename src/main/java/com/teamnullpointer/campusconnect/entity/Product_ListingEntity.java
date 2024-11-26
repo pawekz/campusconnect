@@ -10,7 +10,13 @@ public class Product_ListingEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    private int user_id;
+    @ManyToOne
+    @JoinColumn(name = "user_id", referencedColumnName = "user_id")
+    private AppUserEntity user;
+
+    @ManyToOne
+    @JoinColumn(name = "transaction_id", referencedColumnName = "id")
+    private TransactionEntity transaction;
 
     @Column(name = "product_title")
     private String product_title;
@@ -30,14 +36,6 @@ public class Product_ListingEntity {
     @Column(name = "image")
     private String image;
 
-    public String getImage() {
-        return image;
-    }
-
-    public void setImage(String image) {
-        this.image = image;
-    }
-
     @PrePersist
     protected void onCreate() {
         createdAt = LocalDateTime.now();
@@ -52,12 +50,20 @@ public class Product_ListingEntity {
         this.id = id;
     }
 
-    public int getUser_id() {
-        return user_id;
+    public AppUserEntity getUser() {
+        return user;
     }
 
-    public void setUser_id(int user_id) {
-        this.user_id = user_id;
+    public void setUser(AppUserEntity user) {
+        this.user = user;
+    }
+
+    public TransactionEntity getTransaction() {
+        return transaction;
+    }
+
+    public void setTransaction(TransactionEntity transaction) {
+        this.transaction = transaction;
     }
 
     public String getProduct_title() {
@@ -98,5 +104,13 @@ public class Product_ListingEntity {
 
     public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 }

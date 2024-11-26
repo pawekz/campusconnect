@@ -1,6 +1,7 @@
 package com.teamnullpointer.campusconnect.entity;
 
 import jakarta.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "transactions")
@@ -13,6 +14,9 @@ public class TransactionEntity {
     @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "user_id")
     private AppUserEntity user;
+
+    @OneToMany(mappedBy = "transaction", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Product_ListingEntity> productListings;
 
     private String transactionDetails;
 

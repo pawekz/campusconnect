@@ -11,6 +11,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+
 
 @Service("appUserService")
 public class AppUserIMPL implements AppUserService {
@@ -34,6 +38,10 @@ public class AppUserIMPL implements AppUserService {
         return appUser.getName();
     }
 
+    // Add this line at the beginning of the class
+    private static final Logger logger = LoggerFactory.getLogger(AppUserIMPL.class);
+
+
     @Override
     public LoginResponse loginAppUser(LoginDTO loginDTO) {
         AppUserEntity appUser1 = appUserRepository.findByEmail(loginDTO.getEmail());
@@ -43,14 +51,18 @@ public class AppUserIMPL implements AppUserService {
             String enteredPassword = loginDTO.getPassword();
             Boolean isPasswordMatch = passwordEncoder.matches(enteredPassword, password);
             if (isPasswordMatch) {
+                logger.debug("Login successful for user: {}", loginDTO.getEmail());
                 return new LoginResponse("Login Successful", true);
             } else {
+                logger.debug("Login failed for user: {} - Incorrect password", loginDTO.getEmail());
                 return new LoginResponse("Login Failed", false);
             }
         } else {
+            logger.debug("Login failed - Institution email not found: {}", loginDTO.getEmail());
             return new LoginResponse("Institution email not found", false);
         }
     }
+
 
     @Override
     public Page<AppUserDTO> getAllUsersWithPagination(Pageable pageable) {
@@ -75,6 +87,10 @@ public class AppUserIMPL implements AppUserService {
         appUserRepository.deleteById(Math.toIntExact(userId));
     }
 
+    @Override
+    public AppUserEntity findByEmail(String email) {
+        return appUserRepository.findByEmail(email);
+    }
 
 /*    @Override
     public void deleteUser(int userId) {

@@ -11,6 +11,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/API/admindashboard")
 public class AdminDashboardController {
@@ -31,11 +33,9 @@ public class AdminDashboardController {
         return service.viewPlatformStats();
     }
 
-@PostMapping("/manageUsers")
-public ResponseEntity<Page<AppUserDTO>> manageUsers(
-        @RequestParam(defaultValue = "0") int page,
-        @RequestParam(defaultValue = "10") int size) {
-    return ResponseEntity.ok(service.getUsers(page, size));
+@GetMapping("/manageUsers")
+public ResponseEntity<List<AppUserDTO>> getAllUsers() {
+    return ResponseEntity.ok(service.getAllUsers());
 }
 
     @DeleteMapping("/manageUsers/{userId}")

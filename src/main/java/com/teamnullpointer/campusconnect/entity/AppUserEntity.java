@@ -27,6 +27,12 @@ public class AppUserEntity {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<TransactionEntity> transactions;
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<MessageEntity> messages;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Product_ListingEntity> productListings;
+
     public AppUserEntity(int id, String email, String encode, String name, String userType) {
         this.id = id;
         this.email = email;

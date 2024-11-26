@@ -2,6 +2,7 @@ package com.teamnullpointer.campusconnect.service;
 
 import com.teamnullpointer.campusconnect.DTO.AppUserDTO;
 import com.teamnullpointer.campusconnect.DTO.LoginDTO;
+import com.teamnullpointer.campusconnect.entity.AppUserEntity;
 import com.teamnullpointer.campusconnect.response.LoginResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -19,4 +20,6 @@ public interface AppUserService {
     void deleteUser(Long userId);
 
     void deleteUser(int userId);
+
+    AppUserEntity findByEmail(String email);
 }

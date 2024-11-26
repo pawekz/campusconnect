@@ -4,6 +4,7 @@ import com.teamnullpointer.campusconnect.DTO.AppUserDTO;
 import com.teamnullpointer.campusconnect.DTO.CategoryCountDTO;
 import com.teamnullpointer.campusconnect.DTO.PlatformStatsDTO;
 import com.teamnullpointer.campusconnect.entity.AdminDashboardEntity;
+import com.teamnullpointer.campusconnect.entity.AppUserEntity;
 import com.teamnullpointer.campusconnect.repository.AdminDashboardRepository;
 import com.teamnullpointer.campusconnect.repository.AppUserRepository;
 import com.teamnullpointer.campusconnect.repository.TransactionRepository;
@@ -15,6 +16,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class AdminDashboardService {
@@ -33,30 +35,40 @@ public class AdminDashboardService {
     @Qualifier("appUserService")
     private AppUserService appUserService;
     public PlatformStatsDTO viewPlatformStats() {
-        List<AdminDashboardEntity> adminDashboardEntities = adminDashboardRepository.findAll();
+    List<AdminDashboardEntity> adminDashboardEntities = adminDashboardRepository.findAll();
+    PlatformStatsDTO platformStatsDTO = new PlatformStatsDTO();
+
+    if (!adminDashboardEntities.isEmpty()) {
         AdminDashboardEntity entity = adminDashboardEntities.get(0);
-
         List<CategoryCountDTO> popularCategoriesWithCount = entity.getPopularCategoriesWithCount();
-        long totalUsers = appUserRepository.count();
-        long totalTransactions = transactionRepository.count();
-
-        PlatformStatsDTO platformStatsDTO = new PlatformStatsDTO();
         platformStatsDTO.setId(entity.getId());
         platformStatsDTO.setActiveListing(entity.getActiveListing());
         platformStatsDTO.setPopularCategoriesWithCount(popularCategoriesWithCount);
-        platformStatsDTO.setTotalUsers(totalUsers);
-        platformStatsDTO.setTotalTransactions(totalTransactions);
-
-        return platformStatsDTO;
     }
+
+    long totalUsers = appUserRepository.count();
+    long totalTransactions = transactionRepository.count();
+    platformStatsDTO.setTotalUsers(totalUsers);
+    platformStatsDTO.setTotalTransactions(totalTransactions);
+
+    return platformStatsDTO;
+}
 
     public void manageUsers() {
 
     }
-    public Page<AppUserDTO> getUsers(int page, int size) {
-        Pageable pageable = PageRequest.of(page, size);
-        return appUserService.getAllUsersWithPagination(pageable);
-    }
+public List<AppUserDTO> getAllUsers() {
+    List<AppUserEntity> users = appUserRepository.findAll();
+    return users.stream()
+        .map(user -> new AppUserDTO(
+            user.getId(),
+            user.getEmail(),
+            null,
+            user.getName(),
+            user.getUserType()
+        ))
+        .collect(Collectors.toList());
+}
 
     public void moderateContent() {
         // Implement logic to moderate content
