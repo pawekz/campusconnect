@@ -4,7 +4,7 @@ import { Box, Card, Typography } from '@mui/material';
 import { PieChart } from '@mui/x-charts/PieChart';
 import axios from 'axios';
 import { Link } from '@mui/material'
-import ManageUser from './users/ManageUser.jsx'
+import ManageUser from '../users/ManageUser.jsx'
 
 function Dashboard() {
     const [stats, setStats] = useState({
@@ -17,26 +17,31 @@ function Dashboard() {
 
     useEffect(() => {
         const token = localStorage.getItem('token');
-        // Token automatically included in headers
-        axios.get('http://localhost:8080/API/admindashboard/viewPlatformStats')
-            .then(response => {
-                setStats(response.data);
-            });
+        axios.get('http://localhost:8080/API/admindashboard/viewPlatformStats', {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        })
+        .then(response => {
+            setStats(response.data);
+        })
+        .catch(error => console.error('Error fetching stats:', error));
     }, []);
 
 
-    const pieChartData = stats.popularCategoriesWithCount.map(item => ({
+
+    const pieChartData = stats.popularCategoriesWithCount?.map(item => ({
         id: item.category,
         value: item.count,
         label: item.category
-    }));
+    })) || [];
 
     return (
         <PageContainer
             title="Dashboard"
             breadcrumbs={[
-                { label: 'Home', path: '/dashboard' },
-                { label: 'Dashboard', path: '/dashboard' }
+                { title: 'Home', label: 'Home', path: '/dashboard' },
+                { title: 'Dashboard', label: 'Dashboard', path: '/dashboard' }
             ]}
         >
             <Box sx={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 2, mb: 4 }}>
@@ -83,7 +88,6 @@ function Dashboard() {
                     />
                 </Box>
             </Card>
-            <ManageUser />
         </PageContainer>
     );
 }

@@ -1,21 +1,23 @@
-// campusconnect-react/src/dashboard-toolpad/Dashboard-toolpad.jsx
-import * as React from 'react';
-import PropTypes from 'prop-types';
-import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+import { AppProvider } from '@toolpad/core/AppProvider';
+import { useDemoRouter } from '@toolpad/core/internal';
+import { DashboardLayout } from '@toolpad/core/DashboardLayout';
+import Dashboard from './Dashboard.jsx';
+import ManageUser from '../users/ManageUser.jsx';
+import Analytics from '../analytics/Analytics.jsx';
+import Account from '../../../components/authentication/Account.jsx';
 import { createTheme } from '@mui/material/styles';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import BarChartIcon from '@mui/icons-material/BarChart';
 import PeopleIcon from '@mui/icons-material/People';
-import DescriptionIcon from '@mui/icons-material/Description';
-import { AppProvider } from '@toolpad/core/AppProvider';
-import { useDemoRouter } from '@toolpad/core/internal';
-import { DashboardLayout } from '@toolpad/core/DashboardLayout';
-import Dashboard from './Dashboard.jsx'
-import Analytics from '../analytics/Analytics.jsx'
-import AnalyticsRoundedIcon from "@mui/icons-material/AnalyticsRounded";
-import ManageUser from './users/ManageUser.jsx'
-import Account from "../../../components/authentication/Account.jsx";
+import AnalyticsRoundedIcon from '@mui/icons-material/AnalyticsRounded';
+import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
+import Listing from "../../../components/Product_Listing/Product_Listing_Dashboard.jsx";
+import PropTypes from "prop-types";
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
 
 const NAVIGATION = [
     {
@@ -23,16 +25,22 @@ const NAVIGATION = [
         title: 'Main items',
     },
     {
-        segment: 'dashboard',
+        segment: 'dashboard', //segment is where the folder is
         title: 'Dashboard',
         icon: <DashboardIcon />,
-        component: Dashboard
+        component: Dashboard,
     },
     {
-        segment: 'dashboard/users',
+        segment: 'users',
         title: 'User Management',
         icon: <PeopleIcon />,
-        component: ManageUser
+        component: ManageUser,
+    },
+    {
+        segment: "dashboard/listing",
+        title: 'Listing',
+        icon: <AddShoppingCartIcon />,
+        component: Listing,
     },
     {
         kind: 'divider',
@@ -46,7 +54,7 @@ const NAVIGATION = [
                 segment: 'analytics',
                 title: 'Analytics',
                 icon: <AnalyticsRoundedIcon />,
-                component: Analytics
+                component: Analytics,
             },
         ],
     },
@@ -68,83 +76,81 @@ const demoTheme = createTheme({
     },
 });
 
-function DemoPageContent({ pathname }) {
-    return (
-        <Box
-            sx={{
-                py: 4,
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                textAlign: 'center',
-            }}
-        >
-            <Typography>Dashboard content for {pathname}</Typography>
-        </Box>
-    );
-}
-
-DemoPageContent.propTypes = {
-    pathname: PropTypes.string.isRequired,
-};
-
-function SidebarFooter({ mini }) {
-    return (
-        <Typography
-            variant="caption"
-            sx={{ m: 1, whiteSpace: 'nowrap', overflow: 'hidden' }}
-        >
-            {mini ? '© CC' : `© ${new Date().getFullYear()} CampusConnect`}
-        </Typography>
-    );
-}
-
-SidebarFooter.propTypes = {
-    mini: PropTypes.bool.isRequired,
-};
-
 function DashboardLayoutBasic() {
+    const navigate = useNavigate();
     const router = useDemoRouter('/dashboard');
-    const [session, setSession] = React.useState(() => {
+    const [session, setSession] = useState(() => {
         const token = localStorage.getItem('token');
         if (token) {
+            console.log('Token found in localStorage:', token);
             return {
                 user: {
-                    token: token
-                }
+                    token: token,
+                },
             };
         }
+        console.log('No token found in localStorage');
         return null;
     });
 
-    React.useEffect(() => {
-        if (!localStorage.getItem('token')) {
-            router.push('/');  // Redirect to Homepage if no token
-        }
-    }, []);
+    useEffect(() => {
+        const token = localStorage.getItem('token');
+        console.log('Retrieved token from localStorage:', token);
 
-    const authentication = React.useMemo(() => ({
-        signIn: (userData) => {
-            setSession({
-                user: {
-                    name: userData.name,
-                    email: userData.email,
-                    image: userData.image || '/default-avatar.png',
-                },
-            });
-        },
-        signOut: () => {
-            localStorage.removeItem('token');
-            setSession(null);
-            router.push('/login');
-        },
-    }), [router, setSession]);
+        if (token) {
+            axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+            const validateToken = async () => {
+                try {
+                    const response = await axios.get('http://localhost:8080/user/validate-token');
+                    console.log('Token validation response:', response);
+
+                    if (response.status !== 200) {
+                        console.warn('Token validation failed, removing token and redirecting.');
+                        localStorage.removeItem('token');
+                        navigate('/signin', { replace: true });
+                    }
+                } catch (error) {
+                    console.error('Error during token validation:', error);
+                    localStorage.removeItem('token');
+                    navigate('/signin', { replace: true });
+                }
+            };
+            validateToken();
+        } else {
+            console.warn('No token found, redirecting to sign-in.');
+            navigate('/signin', { replace: true });
+        }
+    }, [navigate]);
+
+    const authentication = React.useMemo(
+        () => ({
+            signIn: (userData) => {
+                console.log('User signed in:', userData);
+                localStorage.setItem('token', userData.token);
+                setSession({
+                    user: {
+                        name: userData.name,
+                        email: userData.email,
+                        image: userData.image || '/default-avatar.png',
+                        token: userData.token,
+                    },
+                });
+            },
+            signOut: () => {
+                console.log('User signed out');
+                localStorage.removeItem('token');
+                setSession(null);
+                navigate('/signin');
+            },
+        }),
+        [navigate]
+    );
 
     const pathSegments = router.pathname.split('/');
     const currentSegment = pathSegments[pathSegments.length - 1] || 'dashboard';
 
     const getCurrentComponent = () => {
-        const mainRoute = NAVIGATION.find(item => item.segment === currentSegment);
+        const mainRoute = NAVIGATION.find((item) => item.segment === currentSegment);
         if (mainRoute?.component) {
             return mainRoute.component;
         }
@@ -152,7 +158,7 @@ function DashboardLayoutBasic() {
         const nestedRoute = NAVIGATION.reduce((found, item) => {
             if (found) return found;
             if (item.children) {
-                return item.children.find(child => child.segment === currentSegment);
+                return item.children.find((child) => child.segment === currentSegment);
             }
             return null;
         }, null);
@@ -175,13 +181,35 @@ function DashboardLayoutBasic() {
             topComponents={[<Account key="account" />]}
         >
             <DashboardLayout>
-                {CurrentComponent ? <CurrentComponent /> : children}
+                {CurrentComponent ? <CurrentComponent /> : <DemoPageContent pathname={router.pathname} />}
             </DashboardLayout>
         </AppProvider>
     );
 }
+
 DashboardLayoutBasic.propTypes = {
     children: PropTypes.node,
+};
+
+
+function DemoPageContent({ pathname }) {
+    return (
+        <Box
+            sx={{
+                py: 4,
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                textAlign: 'center',
+            }}
+        >
+            <Typography>Dashboard content for {pathname}</Typography>
+        </Box>
+    );
+}
+
+DemoPageContent.propTypes = {
+    pathname: PropTypes.string.isRequired,
 };
 
 export default DashboardLayoutBasic;
