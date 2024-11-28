@@ -116,7 +116,7 @@ const handleSubmit = async (event) => {
             axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
 
             // Redirect to the dashboard after successful login
-            navigate('/dashboard-toolpad', { replace: true });
+            navigate('/dashboard', { replace: true });
         }
     } catch (error) {
         console.error('Login error:', error.response?.data || error.message);
