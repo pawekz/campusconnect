@@ -243,15 +243,21 @@ export default function SignUp(props) {
           </Box>
         </Card>
       </SignUpContainer>
-      <Snackbar
-          open={snackbarOpen}
-          autoHideDuration={2000}
-          onClose={() => setSnackbarOpen(false)}
-      >
-        <Alert onClose={() => setSnackbarOpen(false)} severity="success" sx={{ width: '100%' }}>
-          Account Created Successfully
-        </Alert>
-      </Snackbar>
+          <Snackbar
+              open={snackbarOpen}
+              autoHideDuration={2000}
+              onClose={() => setSnackbarOpen(false)}
+              sx={{ '& .MuiSnackbar-root': { backgroundColor: 'success.main' } }}
+          >
+              <Alert
+                  onClose={() => setSnackbarOpen(false)}
+                  severity="success"
+                  variant="filled"
+                  sx={{ width: '100%' }}
+              >
+                  Account Created Successfully
+              </Alert>
+          </Snackbar>
     </AppTheme>
   );
 }

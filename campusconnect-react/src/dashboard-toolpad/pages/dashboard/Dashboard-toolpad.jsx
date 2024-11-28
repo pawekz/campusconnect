@@ -8,6 +8,7 @@ import Dashboard from './Dashboard.jsx';
 import ManageUser from '../users/ManageUser.jsx';
 import Analytics from '../analytics/Analytics.jsx';
 import Account from '../../../components/authentication/Account.jsx';
+import Message from '../messages/Message.jsx';
 import { createTheme } from '@mui/material/styles';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import BarChartIcon from '@mui/icons-material/BarChart';
@@ -18,6 +19,7 @@ import Listing from "../../../components/Product_Listing/Product_Listing_Dashboa
 import PropTypes from "prop-types";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
+import MessageIcon from '@mui/icons-material/Message';
 
 const NAVIGATION = [
     {
@@ -41,6 +43,12 @@ const NAVIGATION = [
         title: 'Listing',
         icon: <AddShoppingCartIcon />,
         component: Listing,
+    },
+    {
+        segment: "messages",
+        title: 'Messages',
+        icon: <MessageIcon />,
+        component: Message,
     },
     {
         kind: 'divider',

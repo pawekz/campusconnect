@@ -47,27 +47,46 @@ function Dashboard() {
             <Box sx={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 2, mb: 4 }}>
                 <Card
                     component={Link}
-                    href="/users"  // Direct route to users management
-                    sx={{
+                    href="http://localhost:5173/users"
+                    sx={(theme) => ({
                         p: 2,
                         textDecoration: 'none',
                         color: 'inherit',
+                        background: theme.palette.mode === 'dark'
+                            ? 'linear-gradient(135deg, #1a237e 0%, #283593 100%)'
+                            : 'linear-gradient(135deg, #E3F2FD 0%, #BBDEFB 100%)',
                         '&:hover': {
                             cursor: 'pointer',
-                            bgcolor: 'action.hover'
+                            transform: 'translateY(-2px)',
+                            transition: 'transform 0.2s ease-in-out',
+                            boxShadow: theme.shadows[4]
                         }
-                    }}
+                    })}
                 >
                     <Typography variant="h6">Users</Typography>
                     <Typography>Total Number: {stats.totalUsers}</Typography>
                 </Card>
 
-                <Card sx={{ p: 2 }}>
+                <Card
+                    sx={(theme) => ({
+                        p: 2,
+                        background: theme.palette.mode === 'dark'
+                            ? 'linear-gradient(135deg, #4a148c 0%, #6a1b9a 100%)'
+                            : 'linear-gradient(135deg, #F3E5F5 0%, #E1BEE7 100%)'
+                    })}
+                >
                     <Typography variant="h6">Transactions</Typography>
                     <Typography>Total Transactions: {stats.totalTransactions}</Typography>
                 </Card>
 
-                <Card sx={{ p: 2 }}>
+                <Card
+                    sx={(theme) => ({
+                        p: 2,
+                        background: theme.palette.mode === 'dark'
+                            ? 'linear-gradient(135deg, #1b5e20 0%, #2e7d32 100%)'
+                            : 'linear-gradient(135deg, #E8F5E9 0%, #C8E6C9 100%)'
+                    })}
+                >
                     <Typography variant="h6">Listings</Typography>
                     <Typography>Active Listings: {stats.activeListing}</Typography>
                 </Card>

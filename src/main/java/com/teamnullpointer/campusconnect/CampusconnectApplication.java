@@ -11,7 +11,7 @@ public class CampusconnectApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(CampusconnectApplication.class, args);
-        logger.info("CampusConnect Application Started");
+        logger.info("CampusConnect Application Started - Backend");
     }
 
 
