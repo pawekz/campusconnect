@@ -12,6 +12,8 @@
   "dependencies": {
     "@emotion/react": "^11.13.3",
     "@emotion/styled": "^11.13.0",
+    "@lordicon/element": "^1.10.1",
+    "@lordicon/react": "^1.10.1",
     "@mui/icons-material": "^6.1.9",
     "@mui/material": "^6.1.9",
     "@mui/x-charts": "^7.22.2",
@@ -22,6 +24,7 @@
     "campusconnect-react": "file:",
     "chart.js": "^4.4.6",
     "jwt-decode": "^4.0.0",
+    "lottie-web": "^5.12.2",
     "prop-types": "^15.8.1",
     "react": "^18.3.1",
     "react-chartjs-2": "^5.2.0",
