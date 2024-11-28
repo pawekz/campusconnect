@@ -12,11 +12,12 @@ import axios from 'axios';
 
 export default function Register() {
     const navigate = useNavigate();
-    const [formData, useState] = useState({
+    const [formData, setFormData] = useState({
         email: '',
         password: '',
         name: ''
     });
+    const [error, setError] = useState('');
 
     const handleChange = (e) => {
         setFormData({
@@ -32,11 +33,15 @@ export default function Register() {
                 ...formData,
                 user_type: 'STUDENT' // Default user type
             });
-            if (response.data) {
+            if (response.status === 200) {
                 navigate('/signin');
             }
         } catch (error) {
-            console.error('Registration failed:', error);
+            if (error.response && error.response.status === 409) {
+                setError('Email is already in use');
+            } else {
+                console.error('Registration failed:', error);
+            }
         }
     };
 
@@ -53,6 +58,7 @@ export default function Register() {
                     <Typography component="h1" variant="h5">
                         Register for CampusConnect
                     </Typography>
+                    {error && <Typography color="error">{error}</Typography>}
                     <Box component="form" onSubmit={handleSubmit} sx={{ mt: 3 }}>
                         <TextField
                             margin="normal"

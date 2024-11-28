@@ -32,7 +32,6 @@ public class AppUserController {
     public String saveUser(@RequestBody AppUserDTO userDTO) {
         return appUserService.addUser(userDTO);
     }
-
 @PostMapping(path = "/login")
 public ResponseEntity<?> loginAppUser(@RequestBody LoginDTO loginDTO) {
     LoginResponse loginResponse = appUserService.loginAppUser(loginDTO);

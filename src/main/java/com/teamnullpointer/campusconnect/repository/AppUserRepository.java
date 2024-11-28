@@ -17,4 +17,6 @@ public interface AppUserRepository extends JpaRepository<AppUserEntity, Integer>
     AppUserEntity findByEmail(String email);
 
     Page<AppUserEntity> findByUserType(String student, Pageable pageable);
+
+    boolean existsByEmail(String email);
 }
