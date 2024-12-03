@@ -69,7 +69,7 @@ public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Excepti
             .requestMatchers("/user/login", "/user/save", "/user/validate-token").permitAll()
             .requestMatchers("/API/admindashboard/**").hasAuthority("admin")
             .anyRequest().authenticated())
-        .addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
+       .addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
 
     logger.debug("Security filter chain configured");
 

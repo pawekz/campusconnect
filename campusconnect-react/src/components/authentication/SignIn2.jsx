@@ -64,11 +64,12 @@ export default function SignIn2(props) {
     const [passwordErrorMessage, setPasswordErrorMessage] = React.useState('');
 
     const validateInputs = () => {
-        const email = document.getElementById('email');
-        const password = document.getElementById('password');
+        const email = document.querySelector('#email');
+        const password = document.querySelector('#password');
         let isValid = true;
+        const isValidCITEmail = /^[a-zA-Z0-9._%+-]+@cit\.edu$/.test(email.value);
 
-        if (!email.value || !/^[a-z]+(\.[a-z]+)?@cit\.edu$/.test(email.value)) {
+        if (!email.value || !isValidCITEmail) {
             setEmailError(true);
             setEmailErrorMessage('Please enter a valid "@cit.edu" email address.');
             isValid = false;

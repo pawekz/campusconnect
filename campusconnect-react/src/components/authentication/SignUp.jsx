@@ -88,8 +88,9 @@ export default function SignUp(props) {
 
   const validateInputs = () => {
     let isValid = true;
+    const isValidCITEmail = /^[a-zA-Z0-9._%+-]+@cit\.edu$/.test(formData.email);
 
-    if (!formData.email || !/^[a-z]+(\.[a-z]+)?@cit\.edu$/.test(formData.email)) {
+    if (!formData.email || !isValidCITEmail) {
       setEmailError(true);
       setEmailErrorMessage('Please enter a valid "@cit.edu" email address.');
       isValid = false;
