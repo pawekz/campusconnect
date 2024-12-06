@@ -9,6 +9,12 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { styled } from '@mui/material/styles';
 import {Tooltip} from "@mui/material";
+import EditProfileIcon from '../../../assets/editProfile3.json?url';
+import DeleteProfileIcon from '../../../assets/deleteProfile2.json?url';
+import {defineElement} from "@lordicon/element";
+import lottie from "lottie-web";
+
+defineElement(lottie.animation);
 
 const StyledDataGrid = styled(DataGrid)(({ theme }) => ({
   '& .MuiDataGrid-columnHeaders': {
@@ -53,9 +59,9 @@ export default function ManageUser() {
 
   const columns = [
     { field: 'id', headerName: 'ID', width: 90 },
-    { field: 'name', headerName: 'Name', width: 130 },
-    { field: 'email', headerName: 'Email', width: 200 },
-    { field: 'user_type', headerName: 'User Type', width: 130 },
+    { field: 'name', headerName: 'Name', width: 240 },
+    { field: 'email', headerName: 'Email', width: 240 },
+    { field: 'user_type', headerName: 'User Type', width: 120 },
     {
       field: 'actions',
       headerName: 'Actions',
@@ -63,14 +69,26 @@ export default function ManageUser() {
       renderCell: (params) => (
         <Box>
           <Tooltip title="Edit Account">
-          <IconButton aria-label="edit" size="large">
-            <EditIcon fontSize="inherit" sx={{ color: 'primary.main' }} onClick={() => handleEdit(params.row)} />
-          </IconButton>
+            <IconButton aria-label="edit" size="large">
+              <lord-icon
+                  trigger="hover"
+                  src={EditProfileIcon}
+                  style={{width: '32px', height: '32px'}}
+                  onClick={() => handleEdit(params.row)}
+              >
+              </lord-icon>
+            </IconButton>
           </Tooltip>
-            <Tooltip title= "Delete Account">
-          <IconButton aria-label="delete" size="large">
-            <DeleteIcon fontSize="inherit" sx={{ color: 'error.main' }} onClick={() => handleDeleteUsers([params.row.id])} />
-          </IconButton>
+          <Tooltip title="Delete Account">
+            <IconButton aria-label="delete" size="large">
+              <lord-icon
+                  trigger="hover"
+                  src={DeleteProfileIcon}
+                  style={{width: '32px', height: '32px'}}
+                  onClick={() => handleDeleteUsers([params.row.id])}
+              >
+              </lord-icon>
+            </IconButton>
           </Tooltip>
         </Box>
       ),
