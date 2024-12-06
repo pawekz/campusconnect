@@ -21,7 +21,8 @@ public class Product_ListingService {
         return repository.findById(id);
     }
 
-    public Product_ListingEntity createProduct(Product_ListingEntity product) {
+    public Product_ListingEntity createProduct(Product_ListingEntity product, String image) {
+        product.setImage(image);
         return repository.save(product);
     }
 

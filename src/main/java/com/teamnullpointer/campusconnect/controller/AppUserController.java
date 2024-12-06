@@ -32,17 +32,18 @@ public class AppUserController {
     public String saveUser(@RequestBody AppUserDTO userDTO) {
         return appUserService.addUser(userDTO);
     }
-@PostMapping(path = "/login")
-public ResponseEntity<?> loginAppUser(@RequestBody LoginDTO loginDTO) {
-    LoginResponse loginResponse = appUserService.loginAppUser(loginDTO);
-    if (loginResponse.isSuccess()) {
-        AppUserEntity appUser = appUserService.findByEmail(loginDTO.getEmail());
-        String token = JwtUtil.generateToken(loginDTO.getEmail(), appUser.getUserType());
-        return ResponseEntity.ok(new JwtResponse(token));
-    } else {
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
+    @PostMapping(path = "/login")
+    public ResponseEntity<?> loginAppUser(@RequestBody LoginDTO loginDTO) {
+        LoginResponse loginResponse = appUserService.loginAppUser(loginDTO);
+        if (loginResponse.isSuccess()) {
+            AppUserEntity appUser = appUserService.findByEmail(loginDTO.getEmail());
+            String token = JwtUtil.generateToken(loginDTO.getEmail(), appUser.getUserType(), appUser.getId());
+            return ResponseEntity.ok(new JwtResponse(token));
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
+        }
     }
-}
+
 
 @GetMapping("/validate-token")
 public ResponseEntity<?> validateToken(@RequestHeader("Authorization") String authHeader) {

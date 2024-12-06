@@ -22,4 +22,6 @@ public interface AppUserService {
     void deleteUser(int userId);
 
     AppUserEntity findByEmail(String email);
+
+    AppUserEntity getUserById(Long userId);
 }

@@ -92,6 +92,11 @@ public class AppUserIMPL implements AppUserService {
         return appUserRepository.findByEmail(email);
     }
 
+    @Override
+    public AppUserEntity getUserById(Long userId) {
+        return appUserRepository.findById(Math.toIntExact(userId))
+                .orElse(null);
+    }
 /*    @Override
     public void deleteUser(int userId) {
         appUserRepository.deleteById(userId);

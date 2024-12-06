@@ -1,7 +1,9 @@
 package com.teamnullpointer.campusconnect.controller;
 
+import com.teamnullpointer.campusconnect.entity.AppUserEntity;
 import com.teamnullpointer.campusconnect.entity.Product_ListingEntity;
 import com.teamnullpointer.campusconnect.service.Product_ListingService;
+import com.teamnullpointer.campusconnect.service.AppUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,6 +13,9 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/products")
 public class Product_ListingController {
+
+    @Autowired
+    private AppUserService appUserService;
 
     @Autowired
     private Product_ListingService service;
@@ -26,8 +31,13 @@ public class Product_ListingController {
     }
 
     @PostMapping
-    public Product_ListingEntity createProduct(@RequestBody Product_ListingEntity product) {
-        return service.createProduct(product);
+    public Product_ListingEntity createProduct(@RequestParam("userId") int userId,
+                                               @RequestParam("imagePath") String imagePath,
+                                               @RequestBody Product_ListingEntity product) {
+        // Fetch user by ID using AppUserService
+        AppUserEntity user = appUserService.getUserById((long) userId);
+        product.setUser(user);
+        return service.createProduct(product, imagePath);
     }
 
     @PutMapping("/{id}")

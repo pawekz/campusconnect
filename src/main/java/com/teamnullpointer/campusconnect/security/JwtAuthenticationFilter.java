@@ -36,13 +36,21 @@ protected void doFilterInternal(HttpServletRequest request, HttpServletResponse 
         if (claims != null) {
             String email = claims.getSubject();
             String userType = claims.get("user_type", String.class);
-            logger.debug("Authenticated user: {}, with role: {}", email, userType);
-            List<SimpleGrantedAuthority> authorities =
-                    Collections.singletonList(new SimpleGrantedAuthority(userType));
-            UsernamePasswordAuthenticationToken authentication =
-                    new UsernamePasswordAuthenticationToken(email, null, authorities);
-            SecurityContextHolder.getContext().setAuthentication(authentication);
-        } else {
+            Integer userId = claims.get("user_id", Integer.class);
+
+            logger.debug("Processing token for user: {}", email);
+
+            // Only proceed if userId is present
+            if (userId != null) {
+                logger.debug("Authenticated user: {}, with role: {}, userId: {}", email, userType, userId);
+                List<SimpleGrantedAuthority> authorities =
+                        Collections.singletonList(new SimpleGrantedAuthority(userType));
+                UsernamePasswordAuthenticationToken authentication =
+                        new UsernamePasswordAuthenticationToken(email, null, authorities);
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+            }
+        }
+        else {
             logger.debug("Invalid JWT Token");
         }
     } else {

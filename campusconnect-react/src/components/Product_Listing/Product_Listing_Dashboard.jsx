@@ -2,6 +2,7 @@ import * as React from 'react';
 import CssBaseline from '@mui/material/CssBaseline';
 import Stack from '@mui/material/Stack';
 import ColorModeSelect from '../shared-theme/ColorModeSelect.jsx';
+import AppTheme from "../shared-theme/AppTheme.jsx";
 
 export default function SignInSide(props) {
     return (

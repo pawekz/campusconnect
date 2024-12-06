@@ -3,6 +3,7 @@ package com.teamnullpointer.campusconnect.config;
 import com.teamnullpointer.campusconnect.security.JwtAuthenticationFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -59,20 +60,19 @@ public class SecurityConfig {
         return source;
     }
 
-@Bean
-public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-    http
-        .cors(cors -> cors.configurationSource(corsConfigurationSource()))
-        .csrf(AbstractHttpConfigurer::disable)
-        .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-        .authorizeHttpRequests(auth -> auth
-            .requestMatchers("/user/login", "/user/save", "/user/validate-token").permitAll()
-            .requestMatchers("/API/admindashboard/**").hasAuthority("admin")
-            .anyRequest().authenticated())
-       .addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        http
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+                .csrf(AbstractHttpConfigurer::disable)
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/user/login", "/user/save", "/user/validate-token").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/products").permitAll() // Allow authenticated access to all product endpoints
+                        .requestMatchers("/API/admindashboard/**").hasAuthority("admin")
+                        .anyRequest().authenticated())
+                .addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
 
-    logger.debug("Security filter chain configured");
-
-    return http.build();
-}
+        return http.build();
+    }
 }
