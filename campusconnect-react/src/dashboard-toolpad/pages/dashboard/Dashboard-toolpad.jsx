@@ -10,63 +10,19 @@ import Analytics from '../analytics/Analytics.jsx';
 import Account from '../../../components/authentication/Account.jsx';
 import Message from '../messages/Message.jsx';
 import { createTheme } from '@mui/material/styles';
-import DashboardIcon from '@mui/icons-material/Dashboard';
+import DashboardIcon from '../../../assets/dashboardIcon2.json?url';
+import ReportIcon from '../../../assets/reportIcon.json?url';
 import BarChartIcon from '@mui/icons-material/BarChart';
-import PeopleIcon from '@mui/icons-material/People';
+import PeopleIcon from '../../../assets/peopleIcon.json?url';
 import AnalyticsRoundedIcon from '@mui/icons-material/AnalyticsRounded';
-import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
-import Listing from "../../../components/Product_Listing/Product_Listing_Dashboard.jsx";
+import AddShoppingCartIcon from '../../../assets/listing.json?url';
+import Listing from "../../pages/listing/AddProduct.jsx";
 import PropTypes from "prop-types";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
-import MessageIcon from '@mui/icons-material/Message';
-
-const NAVIGATION = [
-    {
-        kind: 'header',
-        title: 'Main items',
-    },
-    {
-        segment: 'dashboard', //segment is where the folder is
-        title: 'Dashboard',
-        icon: <DashboardIcon />,
-        component: Dashboard,
-    },
-    {
-        segment: 'users',
-        title: 'User Management',
-        icon: <PeopleIcon />,
-        component: ManageUser,
-    },
-    {
-        segment: "dashboard/listing",
-        title: 'Listing',
-        icon: <AddShoppingCartIcon />,
-        component: Listing,
-    },
-    {
-        segment: "messages",
-        title: 'Messages',
-        icon: <MessageIcon />,
-        component: Message,
-    },
-    {
-        kind: 'divider',
-    },
-    {
-        segment: 'reports',
-        title: 'Reports',
-        icon: <BarChartIcon />,
-        children: [
-            {
-                segment: 'analytics',
-                title: 'Analytics',
-                icon: <AnalyticsRoundedIcon />,
-                component: Analytics,
-            },
-        ],
-    },
-];
+import MessageIcon from '../../../assets/chatIcon.json?url';
+import {defineElement} from "@lordicon/element";
+import lottie from "lottie-web";
 
 const demoTheme = createTheme({
     cssVariables: {
@@ -83,8 +39,85 @@ const demoTheme = createTheme({
         },
     },
 });
+const NAVIGATION = [
+    {
+        kind: 'header',
+        title: 'Options',
+    },
+    {
+        segment: 'dashboard', //segment is where the folder is
+        title: 'Dashboard',
+        icon: <lord-icon
+            trigger="hover"
+            src={DashboardIcon}
+            style={{width: '32px', height: '32px'}}
+        >
+        </lord-icon>
+        ,
+        component: Dashboard,
+    },
+    {
+        segment: 'users',
+        title: 'User Management',
+        icon: <lord-icon
+            trigger="hover"
+            src={PeopleIcon}
+            style={{width: '32px', height: '32x'}}
+        >
+        </lord-icon>
+        ,
+        component: ManageUser,
+    },
+    {
+        segment: 'listing',
+        title: 'Listing',
+        icon: <lord-icon
+            trigger="hover"
+            src={AddShoppingCartIcon}
+            style={{width: '32px', height: '30x'}}
+        >
+        </lord-icon>
+        ,
+        component: Listing,
+    },
+    {
+        segment: 'messages',
+        title: 'Messages',
+        icon: <lord-icon
+            trigger="hover"
+            src={MessageIcon}
+            style={{width: '32px', height: '30x'}}
+        >
+        </lord-icon>
+        ,
+        component: Message,
+    },
+    {
+        kind: 'divider',
+    },
+    {
+        segment: 'reports',
+        title: 'Reports',
+        icon: <AnalyticsRoundedIcon />,
+        children: [
+            {
+                segment: 'analytics',
+                title: 'Analytics',
+                icon: <AnalyticsRoundedIcon />,
+                component: Analytics,
+            },
+        ],
+    },
+];
+
+
+const handleSegmentNavigation = (segment) => {
+    router.pathname = `/${segment}`;
+};
 
 function DashboardLayoutBasic() {
+    defineElement(lottie.animation);
+
     const navigate = useNavigate();
     const router = useDemoRouter('/dashboard');
     const [session, setSession] = useState(() => {
@@ -139,7 +172,7 @@ function DashboardLayoutBasic() {
                     user: {
                         name: userData.name,
                         email: userData.email,
-                        image: userData.image || '/default-avatar.png',
+                        /*image: userData.image || '/default-avatar.png',*/
                         token: userData.token,
                     },
                 });
@@ -156,6 +189,19 @@ function DashboardLayoutBasic() {
 
     const pathSegments = router.pathname.split('/');
     const currentSegment = pathSegments[pathSegments.length - 1] || 'dashboard';
+
+    //test where the URL of USER MANAGEMENT
+    useEffect(() => {
+        console.table({
+            'Current Path': router.pathname,
+            'Current Segment': currentSegment,
+            'Full URL': window.location.href,
+            'Navigation State': {
+                from: pathSegments[pathSegments.length - 2] || 'root',
+                to: currentSegment
+            }
+        });
+    }, [router.pathname, currentSegment, pathSegments]);
 
     const getCurrentComponent = () => {
         const mainRoute = NAVIGATION.find((item) => item.segment === currentSegment);
@@ -188,7 +234,7 @@ function DashboardLayoutBasic() {
             theme={demoTheme}
             topComponents={[<Account key="account" />]}
         >
-            <DashboardLayout>
+            <DashboardLayout defaultSidebarCollapsed>
                 {CurrentComponent ? <CurrentComponent /> : <DemoPageContent pathname={router.pathname} />}
             </DashboardLayout>
         </AppProvider>
@@ -221,3 +267,6 @@ DemoPageContent.propTypes = {
 };
 
 export default DashboardLayoutBasic;
+
+
+

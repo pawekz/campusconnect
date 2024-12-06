@@ -81,13 +81,14 @@ export default function Homepage() {
                                 p: 3,
                                 border: '1px solid #e0e0e0',
                                 borderRadius: 2,
-                                backgroundColor: '#408d3a',
+                                background: '#128509',
                                 height: 200,
                                 width: 300,
                                 display: 'flex',
                                 flexDirection: 'column',
                                 alignItems: 'center',
-                                textAlign: 'center'
+                                textAlign: 'center',
+                                color: 'white'
                             }}>
                                 <lord-icon
                                     trigger="hover"
@@ -95,7 +96,10 @@ export default function Homepage() {
                                     style={{width: '100px', height: '100px'}}
                                 >
                                 </lord-icon>
-                                <Typography variant="h5" gutterBottom>
+                                <Typography variant="h5" gutterBottom sx={{
+                                    color: '#e4f1e4',
+                                    textShadow: '1px 1px 2px rgba(0, 0, 0, 0.1)'
+                                }}>
                                     E-commerce Marketplace
                                 </Typography>
                                 <Typography>

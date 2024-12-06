@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
+import { useDemoRouter } from '@toolpad/core/internal';
 import { PageContainer } from '@toolpad/core';
 import { Box, Card, Typography } from '@mui/material';
 import { PieChart } from '@mui/x-charts/PieChart';
 import axios from 'axios';
 import { Link } from '@mui/material'
 import ManageUser from '../users/ManageUser.jsx'
+import { useNavigate } from 'react-router-dom';
 
 function Dashboard() {
     const [stats, setStats] = useState({
@@ -13,7 +15,6 @@ function Dashboard() {
         activeListing: 0,
         popularCategoriesWithCount: []
     });
-
 
     useEffect(() => {
         const token = localStorage.getItem('token');
@@ -46,12 +47,10 @@ function Dashboard() {
         >
             <Box sx={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 2, mb: 4 }}>
                 <Card
-                    component={Link}
-                    href="http://localhost:5173/users"
                     sx={(theme) => ({
                         p: 2,
-                        textDecoration: 'none',
-                        color: 'inherit',
+                        cursor: 'pointer',
+                        borderRadius: '8px',
                         background: theme.palette.mode === 'dark'
                             ? 'linear-gradient(135deg, #1a237e 0%, #283593 100%)'
                             : 'linear-gradient(135deg, #E3F2FD 0%, #BBDEFB 100%)',
@@ -67,9 +66,11 @@ function Dashboard() {
                     <Typography>Total Number: {stats.totalUsers}</Typography>
                 </Card>
 
+
                 <Card
                     sx={(theme) => ({
                         p: 2,
+                        borderRadius: '8px',
                         background: theme.palette.mode === 'dark'
                             ? 'linear-gradient(135deg, #4a148c 0%, #6a1b9a 100%)'
                             : 'linear-gradient(135deg, #F3E5F5 0%, #E1BEE7 100%)'
@@ -82,6 +83,7 @@ function Dashboard() {
                 <Card
                     sx={(theme) => ({
                         p: 2,
+                        borderRadius: '8px',
                         background: theme.palette.mode === 'dark'
                             ? 'linear-gradient(135deg, #1b5e20 0%, #2e7d32 100%)'
                             : 'linear-gradient(135deg, #E8F5E9 0%, #C8E6C9 100%)'
@@ -92,7 +94,7 @@ function Dashboard() {
                 </Card>
             </Box>
 
-            <Card sx={{ p: 2 }}>
+            <Card sx={{ p: 2, borderRadius: '8px',}}>
                 <Typography variant="h6" sx={{ mb: 2 }}>Popular Categories</Typography>
                 <Box sx={{ height: 400, width: '100%' }}>
                     <PieChart

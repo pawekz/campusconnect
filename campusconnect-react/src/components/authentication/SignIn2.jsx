@@ -15,6 +15,7 @@ import { styled } from '@mui/material/styles';
 import AppTheme from '../shared-theme/AppTheme';
 import ColorModeSelect from '../shared-theme/ColorModeSelect';
 import { useNavigate } from 'react-router-dom';
+import Alert from '@mui/material/Alert';
 import axios from 'axios';
 
 const Card = styled(MuiCard)(({ theme }) => ({
@@ -62,6 +63,7 @@ export default function SignIn2(props) {
     const [emailErrorMessage, setEmailErrorMessage] = React.useState('');
     const [passwordError, setPasswordError] = React.useState(false);
     const [passwordErrorMessage, setPasswordErrorMessage] = React.useState('');
+    const [loginError, setLoginError] = React.useState('');
 
     const validateInputs = () => {
         const email = document.querySelector('#email');
@@ -121,6 +123,7 @@ const handleSubmit = async (event) => {
         }
     } catch (error) {
         console.error('Login error:', error.response?.data || error.message);
+        setLoginError('Invalid credentials / Account does not exist');
     } finally {
         setIsLoading(false);
     }
@@ -149,8 +152,12 @@ const handleSubmit = async (event) => {
                             flexDirection: 'column',
                             width: '100%',
                             gap: 2,
-                        }}
-                    >
+                        }}>
+                        { loginError && (
+                            <Alert severity="error" onClose={() => setLoginError('')}>
+                                {loginError}
+                            </Alert>
+                        )}
                         <FormControl>
                             <FormLabel htmlFor="email">Email</FormLabel>
                             <TextField
