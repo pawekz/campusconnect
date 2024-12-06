@@ -16,7 +16,9 @@ import BarChartIcon from '@mui/icons-material/BarChart';
 import PeopleIcon from '../../../assets/peopleIcon.json?url';
 import AnalyticsRoundedIcon from '@mui/icons-material/AnalyticsRounded';
 import AddShoppingCartIcon from '../../../assets/listing.json?url';
+import AddListingIcon from '../../../assets/addListing.json?url';
 import Listing from "../../pages/listing/AddProduct.jsx";
+import EditListingIcon from '../../../assets/editListing.json?url';
 import PropTypes from "prop-types";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
@@ -74,11 +76,33 @@ const NAVIGATION = [
         icon: <lord-icon
             trigger="hover"
             src={AddShoppingCartIcon}
-            style={{width: '32px', height: '30x'}}
+            style={{width: '32px', height: '32x'}}
         >
         </lord-icon>
-        ,
-        component: Listing,
+        ,children: [
+            {
+                segment: 'analytics',
+                title: 'Add Listing',
+                icon: <lord-icon
+                    trigger="hover"
+                    src={AddListingIcon}
+                    style={{width: '32px', height: '32x'}}
+                >
+                </lord-icon>,
+                component: Listing,
+            },
+            {
+                segment: 'analytics', //tarungonon
+                title: 'Edit Listing',
+                icon: <lord-icon
+                    trigger="hover"
+                    src={EditListingIcon}
+                    style={{width: '32px', height: '32x'}}
+                >
+                </lord-icon>,
+                component: Listing,
+            }
+        ],
     },
     {
         segment: 'messages',
@@ -86,7 +110,7 @@ const NAVIGATION = [
         icon: <lord-icon
             trigger="hover"
             src={MessageIcon}
-            style={{width: '32px', height: '30x'}}
+            style={{width: '32px', height: '3x'}}
         >
         </lord-icon>
         ,

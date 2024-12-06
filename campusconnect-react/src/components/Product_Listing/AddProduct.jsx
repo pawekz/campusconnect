@@ -5,6 +5,7 @@ import { TextField, Button, Grid, FormControl, Typography, Select, MenuItem, Inp
 import { autoPlay } from 'react-swipeable-views-utils';
 import SwipeableViews from 'react-swipeable-views';
 import { useNavigate } from 'react-router-dom';
+import {PageContainer} from "@toolpad/core/PageContainer";
 
 const AutoPlaySwipeableViews = autoPlay(SwipeableViews);
 const style = {
@@ -84,6 +85,7 @@ export default function AddProduct() {
     };
 
     return (
+        <PageContainer>
         <FormProvider {...methods}>
             <Typography variant="h4" fontWeight="bold" align="center" gutterBottom>
                 ADD PRODUCTS
@@ -215,5 +217,6 @@ export default function AddProduct() {
                 </Box>
             </Modal>
         </FormProvider>
+        </PageContainer>
     );
 }

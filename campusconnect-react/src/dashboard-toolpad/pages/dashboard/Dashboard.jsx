@@ -23,10 +23,15 @@ function Dashboard() {
                 'Authorization': `Bearer ${token}`
             }
         })
-        .then(response => {
-            setStats(response.data);
-        })
-        .catch(error => console.error('Error fetching stats:', error));
+            .then(response => {
+                console.table({
+                    'Response Data': response.data,
+                    'Active Listings': response.data.activeListing,
+                    'Categories': response.data.popularCategoriesWithCount
+                });
+                setStats(response.data);
+            })
+            .catch(error => console.error('Error fetching stats:', error));
     }, []);
 
 

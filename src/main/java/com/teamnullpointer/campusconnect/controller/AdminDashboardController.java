@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,19 +25,21 @@ public class AdminDashboardController {
     AppUserService appUserService;
 
     @GetMapping("/test")
-    public String test(){
+    public String test() {
         return "You're Accessing the Admin Index Controller";
     }
 
     @GetMapping("/viewPlatformStats")
     public PlatformStatsDTO viewPlatformStats() {
-        return service.viewPlatformStats();
+        PlatformStatsDTO stats = service.viewPlatformStats();
+        System.out.println("Active Listings: " + stats.getActiveListing());
+        return stats;
     }
 
-@GetMapping("/manageUsers")
-public ResponseEntity<List<AppUserDTO>> getAllUsers() {
-    return ResponseEntity.ok(service.getAllUsers());
-}
+    @GetMapping("/manageUsers")
+    public ResponseEntity<List<AppUserDTO>> getAllUsers() {
+        return ResponseEntity.ok(service.getAllUsers());
+    }
 
     @DeleteMapping("/manageUsers/{userId}")
     public ResponseEntity<String> deleteUserById(@PathVariable Long userId) {
@@ -47,5 +50,11 @@ public ResponseEntity<List<AppUserDTO>> getAllUsers() {
     @PostMapping("/moderateContent")
     public void moderateContent() {
         service.moderateContent();
+    }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<String> handleException(Exception e) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body("Invalid request: " + e.getMessage());
     }
 }
