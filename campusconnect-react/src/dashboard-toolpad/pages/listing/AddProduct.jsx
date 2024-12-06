@@ -29,44 +29,33 @@ export default function AddProduct() {
         const token = localStorage.getItem('token');
         const payload = JSON.parse(atob(token.split('.')[1]));
         const userId = payload.user_id;
-        const imagePath = `/src/assets/productImage/${file.name}`;
 
-        // Create URL with query parameters
-        const url = new URL('http://localhost:8080/products');
-        url.searchParams.append('userId', userId);
-        url.searchParams.append('imagePath', imagePath);
-
-        const productData = {
+        // Create FormData object
+        const formData = new FormData();
+        formData.append('file', file);
+        formData.append('userId', userId);
+        formData.append('productData', JSON.stringify({
             product_title: data.product_title,
             product_description: data.product_description,
             price: parseFloat(data.price),
             category: data.category
-        };
+        }));
 
         try {
-            const response = await axios.post(url.toString(), productData, {
+            const response = await axios.post('http://localhost:8080/products', formData, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'multipart/form-data'
                 }
-            });
-
-            console.table({
-                requestUrl: url.toString(),
-                requestData: productData,
-                responseStatus: response.status
             });
 
             setOpen(true);
         } catch (error) {
-            console.table({
-                errorStatus: error.response?.status,
-                errorMessage: error.response?.data,
-                requestUrl: url.toString(),
-                requestData: productData
-            });
+            console.error(error);
+            setError('Failed to create product');
         }
     };
+
 
 
 

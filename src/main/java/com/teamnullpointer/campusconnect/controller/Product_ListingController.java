@@ -6,6 +6,11 @@ import com.teamnullpointer.campusconnect.service.Product_ListingService;
 import com.teamnullpointer.campusconnect.service.AppUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.web.multipart.MultipartFile;
+import java.io.File;
+import java.io.IOException;
+
 
 import java.util.List;
 import java.util.Optional;
@@ -31,14 +36,46 @@ public class Product_ListingController {
     }
 
     @PostMapping
-    public Product_ListingEntity createProduct(@RequestParam("userId") int userId,
-                                               @RequestParam("imagePath") String imagePath,
-                                               @RequestBody Product_ListingEntity product) {
-        // Fetch user by ID using AppUserService
+    public Product_ListingEntity createProduct(
+            @RequestParam("userId") int userId,
+            @RequestParam("file") MultipartFile file,
+            @RequestParam("productData") String productDataJson) throws IOException {
+
+        ObjectMapper mapper = new ObjectMapper();
+        Product_ListingEntity product = mapper.readValue(productDataJson, Product_ListingEntity.class);
+
+        // Get the project root directory
+        String projectDir = System.getProperty("user.dir");
+        String uploadDir = projectDir + "/campusconnect-react/src/assets/productImage/";
+
+        // Create directory if it doesn't exist
+        // Create directory if it doesn't exist
+        File directory = new File(uploadDir);
+        if (!directory.exists()) {
+            boolean dirCreated = directory.mkdirs();
+            if (!dirCreated) {
+                throw new IOException("Failed to create directory: " + uploadDir);
+            }
+        }
+
+        // Save the file
+        String fileName = file.getOriginalFilename();
+        String filePath = uploadDir + fileName;
+        file.transferTo(new File(filePath));
+
+        // Set the relative path for database storage
+        // Use the existing image field
+        product.setImage("/src/assets/productImage/" + fileName);
+
+
+        // Fetch user and set it
         AppUserEntity user = appUserService.getUserById((long) userId);
         product.setUser(user);
-        return service.createProduct(product, imagePath);
+
+        return service.createProduct(product, product.getImage());
+
     }
+
 
     @PutMapping("/{id}")
     public Product_ListingEntity updateProduct(@PathVariable int id, @RequestBody Product_ListingEntity productDetails) {

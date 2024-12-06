@@ -37,6 +37,7 @@ campusconnect-react/node_modules/
 campusconnect-react/.env
 campusconnect-react/build/
 campusconnect-react/.cache
+campusconnect-react/src/assets/productImage
 
 target
 node_modules
@@ -46,5 +47,7 @@ campusconnect.iml
 .mvn
 .env
 run
+
+
 
 
