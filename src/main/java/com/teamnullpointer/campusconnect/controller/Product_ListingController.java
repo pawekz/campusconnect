@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/API/product-listing")
+@RequestMapping("/API/productlisting")
 @CrossOrigin(origins = "http://localhost:5173")
 public class Product_ListingController {
 
@@ -45,7 +45,7 @@ public class Product_ListingController {
         return service.getProductById(id);
     }
 
-    @PostMapping
+    @PostMapping("/create")
     public Product_ListingEntity createProduct(
             @RequestParam("userId") int userId,
             @RequestParam("file") MultipartFile file,

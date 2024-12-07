@@ -68,9 +68,10 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/user/login", "/user/save", "/user/validate-token").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/products").permitAll() // Allow authenticated access to all product endpoints
+  /*                      .requestMatchers(HttpMethod.POST, "/products").permitAll()*/ // Allow authenticated access to all product endpoints
                         .requestMatchers("/API/admindashboard/**").hasAuthority("admin")
                         .requestMatchers("/API/product-listing/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/products").authenticated()
                         .anyRequest().authenticated())
                 .addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
 
