@@ -47,6 +47,17 @@ public class AdminDashboardController {
         return ResponseEntity.ok("User successfully deleted");
     }
 
+    @PutMapping("/manageUsers/{userId}")
+    public ResponseEntity<String> updateUser(@PathVariable Long userId, @RequestBody AppUserDTO userDTO) {
+        try {
+            appUserService.updateUser(userId, userDTO);
+            return ResponseEntity.ok("User successfully updated");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("Error updating user: " + e.getMessage());
+        }
+    }
+
     @PostMapping("/moderateContent")
     public void moderateContent() {
         service.moderateContent();

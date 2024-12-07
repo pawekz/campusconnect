@@ -101,4 +101,17 @@ public class AppUserIMPL implements AppUserService {
     public void deleteUser(int userId) {
         appUserRepository.deleteById(userId);
     }*/
+
+    @Override
+    public void updateUser(Long userId, AppUserDTO userDTO) {
+        AppUserEntity user = appUserRepository.findById(Math.toIntExact(userId))
+                .orElseThrow(() -> new RuntimeException("User not found with id: " + userId));
+
+        user.setName(userDTO.getName());
+        user.setEmail(userDTO.getEmail());
+        user.setUserType(userDTO.getUser_type());
+
+        appUserRepository.save(user);
+    }
+
 }

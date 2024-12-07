@@ -24,4 +24,6 @@ public interface AppUserService {
     AppUserEntity findByEmail(String email);
 
     AppUserEntity getUserById(Long userId);
+
+    void updateUser(Long userId, AppUserDTO userDTO);
 }
