@@ -70,6 +70,7 @@ public class SecurityConfig {
                         .requestMatchers("/user/login", "/user/save", "/user/validate-token").permitAll()
                         .requestMatchers(HttpMethod.POST, "/products").permitAll() // Allow authenticated access to all product endpoints
                         .requestMatchers("/API/admindashboard/**").hasAuthority("admin")
+                        .requestMatchers("/API/product-listing/**").permitAll()
                         .anyRequest().authenticated())
                 .addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
 

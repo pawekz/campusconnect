@@ -4,30 +4,40 @@ import com.teamnullpointer.campusconnect.entity.AppUserEntity;
 import com.teamnullpointer.campusconnect.entity.Product_ListingEntity;
 import com.teamnullpointer.campusconnect.service.Product_ListingService;
 import com.teamnullpointer.campusconnect.service.AppUserService;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.IOException;
-
-
 import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/products")
+@RequestMapping("/API/product-listing")
+@CrossOrigin(origins = "http://localhost:5173")
 public class Product_ListingController {
 
+    private static final Logger logger = LoggerFactory.getLogger(Product_ListingController.class);
     @Autowired
     private AppUserService appUserService;
 
     @Autowired
     private Product_ListingService service;
 
-    @GetMapping
+    @GetMapping("/all")
     public List<Product_ListingEntity> getAllProducts() {
-        return service.getAllProducts();
+        logger.debug("Request received for getAllProducts");
+        logger.debug("Authorization header: {}", SecurityContextHolder.getContext().getAuthentication());
+        logger.debug("User authorities: {}", SecurityContextHolder.getContext().getAuthentication().getAuthorities());
+
+        List<Product_ListingEntity> products = service.getAllProducts();
+        logger.debug("Retrieved {} products", products.size());
+
+        return products;
     }
 
     @GetMapping("/{id}")
