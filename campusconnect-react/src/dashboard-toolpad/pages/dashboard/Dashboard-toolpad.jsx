@@ -17,7 +17,8 @@ import PeopleIcon from '../../../assets/peopleIcon.json?url';
 import AnalyticsRoundedIcon from '@mui/icons-material/AnalyticsRounded';
 import AddShoppingCartIcon from '../../../assets/listing.json?url';
 import AddListingIcon from '../../../assets/addListing.json?url';
-import Listing from "../../pages/listing/AddProduct.jsx";
+import AddListing from "../../pages/listing/AddProduct.jsx";
+import EditListing from "../../pages/listing/ViewAllListing.jsx";
 import EditListingIcon from '../../../assets/editListing.json?url';
 import PropTypes from "prop-types";
 import Box from "@mui/material/Box";
@@ -78,10 +79,10 @@ const NAVIGATION = [
             src={AddShoppingCartIcon}
             style={{width: '32px', height: '32x'}}
         >
-        </lord-icon>
-        ,children: [
+        </lord-icon>,
+        children: [
             {
-                segment: 'analytics',
+                segment: 'add', // Changed from 'listing'
                 title: 'Add Listing',
                 icon: <lord-icon
                     trigger="hover"
@@ -89,10 +90,10 @@ const NAVIGATION = [
                     style={{width: '32px', height: '32x'}}
                 >
                 </lord-icon>,
-                component: Listing,
+                component: AddListing,
             },
             {
-                segment: 'analytics', //tarungonon
+                segment: 'edit', // Changed from 'listing'
                 title: 'Edit Listing',
                 icon: <lord-icon
                     trigger="hover"
@@ -100,7 +101,7 @@ const NAVIGATION = [
                     style={{width: '32px', height: '32x'}}
                 >
                 </lord-icon>,
-                component: Listing,
+                component: EditListing,
             }
         ],
     },
