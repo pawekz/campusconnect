@@ -76,9 +76,16 @@ function Dashboard() {
                     sx={(theme) => ({
                         p: 2,
                         borderRadius: '8px',
+                        cursor: 'pointer',
                         background: theme.palette.mode === 'dark'
                             ? 'linear-gradient(135deg, #4a148c 0%, #6a1b9a 100%)'
-                            : 'linear-gradient(135deg, #F3E5F5 0%, #E1BEE7 100%)'
+                            : 'linear-gradient(135deg, #F3E5F5 0%, #E1BEE7 100%)',
+                        '&:hover': {
+                            cursor: 'pointer',
+                            transform: 'translateY(-2px)',
+                            transition: 'transform 0.2s ease-in-out',
+                            boxShadow: theme.shadows[4]
+                        }
                     })}
                 >
                     <Typography variant="h6">Transactions</Typography>
@@ -89,9 +96,16 @@ function Dashboard() {
                     sx={(theme) => ({
                         p: 2,
                         borderRadius: '8px',
+                        cursor: 'pointer',
                         background: theme.palette.mode === 'dark'
                             ? 'linear-gradient(135deg, #1b5e20 0%, #2e7d32 100%)'
-                            : 'linear-gradient(135deg, #E8F5E9 0%, #C8E6C9 100%)'
+                            : 'linear-gradient(135deg, #E8F5E9 0%, #C8E6C9 100%)',
+                        '&:hover': {
+                            cursor: 'pointer',
+                            transform: 'translateY(-2px)',
+                            transition: 'transform 0.2s ease-in-out',
+                            boxShadow: theme.shadows[4]
+                        }
                     })}
                 >
                     <Typography variant="h6">Listings</Typography>

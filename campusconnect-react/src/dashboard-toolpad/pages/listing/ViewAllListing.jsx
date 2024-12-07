@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import {
   Box,
   Card,
@@ -20,8 +20,12 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import DeleteListingModal from './DeleteListingModal.jsx';
 import EditListingModal from './EditListingModal.jsx';
+import { TextField, InputAdornment } from '@mui/material';
+import SearchIcon from '@mui/icons-material/Search';
+import { useTheme } from '@mui/material/styles';
 
 const ViewAllListing = () => {
+  const theme = useTheme();
   const [listings, setListings] = useState([]);
   const [loading, setLoading] = useState(true);
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
@@ -33,21 +37,53 @@ const ViewAllListing = () => {
     product_title: '',
     product_description: '',
     price: '',
-    category: ''
+    category: '',
+    condition: '',
+    location: '',
+    contact: ''
   });
   const [selectedListing, setSelectedListing] = useState(null);
   const [openDetailDialog, setOpenDetailDialog] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+
+  const getUserInfoFromToken = () => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      console.log('Full token payload:', payload); // See exact structure
+      return {
+        userId: payload.user_id, // Verify if this matches the token claim name
+        userType: payload.user_type
+      };
+    }
+    return null;
+  };
+
 
   useEffect(() => {
     const fetchListings = async () => {
       try {
         const token = localStorage.getItem('token');
-        const response = await axios.get('http://localhost:8080/API/product-listing/all', {
+        const userInfo = getUserInfoFromToken();
+        console.log('User info from token:', userInfo);
+
+        // Ensure token is properly formatted in Authorization header
+        const response = await axios.get('http://localhost:8080/API/productlisting/all', {
           headers: {
-            'Authorization': `Bearer ${token}`
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
           }
         });
-        setListings(response.data);
+
+        if (userInfo?.userType === 'admin') {
+          setListings(response.data);
+        } else {
+          // Filter listings for student user
+          const filteredListings = response.data.filter(listing => {
+            return listing.user?.id === userInfo?.userId;
+          });
+          setListings(filteredListings);
+        }
         setLoading(false);
       } catch (error) {
         console.error('Error fetching listings:', error);
@@ -57,6 +93,12 @@ const ViewAllListing = () => {
 
     fetchListings();
   }, []);
+
+
+
+
+
+  const textFieldRef = useRef(null);
 
   const handleEditPrompt = (listing) => {
     setListingToEdit(listing);
@@ -71,7 +113,7 @@ const ViewAllListing = () => {
 
   const handleConfirmEdit = () => {
     const token = localStorage.getItem('token');
-    axios.put(`http://localhost:8080/API/product-listing/${listingToEdit.id}`, editFormData, {
+    axios.put(`http://localhost:8080/API/productlisting/${listingToEdit.id}`, editFormData, {
       headers: {
         'Authorization': `Bearer ${token}`
       }
@@ -99,7 +141,7 @@ const ViewAllListing = () => {
   const handleConfirmDelete = () => {
     if (listingToDelete && confirmationTitle === listingToDelete.product_title) {
       const token = localStorage.getItem('token');
-      axios.delete(`http://localhost:8080/API/product-listing/${listingToDelete.id}`, {
+      axios.delete(`http://localhost:8080/API/productlisting/${listingToDelete.id}`, {
         headers: {
           'Authorization': `Bearer ${token}`
         }
@@ -121,27 +163,50 @@ const ViewAllListing = () => {
     setOpenDetailDialog(true);
   };
 
+  const filteredListings = listings.filter(listing =>
+      listing.product_title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      listing.product_description.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
   return (
     <PageContainer>
       <Box sx={{ maxWidth: 1200, margin: '0 auto', p: 3 }}>
+        <TextField
+            fullWidth
+            variant="outlined"
+            placeholder="Search listings..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            sx={{ mb: 3, width: '91%'}}
+            InputProps={{
+              startAdornment: (
+                  <InputAdornment position="start">
+                    <SearchIcon />
+                  </InputAdornment>
+              ),
+            }}
+            ref={textFieldRef}/>
         <Grid container spacing={3}>
-          {listings.map((listing) => (
+          {filteredListings.map((listing) => (
             <Grid xs={12} sm={6} md={4} key={listing.id}>
-                <Card
-                    sx={{
-                        width: 320, // fixed ang width
-                        height: 500,
-                        m: 'auto',
-                        display: 'flex',
-                        flexDirection: 'column',
-                        transition: 'all 0.3s ease-in-out',
-                        '&:hover': {
-                            transform: 'translateY(-5px)',
-                            boxShadow: '0 4px 20px rgba(0,0,0,0.2)',
-                            background: 'linear-gradient(rgba(255,255,255,0.9), rgba(255,255,255,0.9))',
-                            cursor: 'pointer'
-                        }
-                    }}
+              <Card
+                  sx={{
+                    width: 320,
+                    height: 500,
+                    m: 'auto',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    transition: 'all 0.4s ease-in-out',
+                    backgroundColor: theme.palette.background.paper, // Use theme background color
+                    '&:hover': {
+                      transform: 'translateY(-5px)',
+                      boxShadow: theme.shadows[10],
+                      background: theme.palette.mode === 'dark'
+                          ? 'linear-gradient(rgba(66, 66, 66, 0.9), rgba(66, 66, 66, 0.9))'
+                          : 'linear-gradient(rgba(255,255,255,0.9), rgba(255,255,255,0.9))',
+                      cursor: 'pointer'
+                    }
+                  }}
                 onClick={() => handleCardClick(listing)}
               >
                 <CardMedia
@@ -164,6 +229,15 @@ const ViewAllListing = () => {
                   }}
                 >
                   <Box sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
+                    <Typography
+                        variant="subtitle2"
+                        sx={{
+                          mb: 1,
+                          color: theme.palette.text.secondary
+                        }}
+                    >
+                      Posted by: {listing.user.name}
+                    </Typography>
                     <Typography
                       variant="h6"
                       sx={{
@@ -190,7 +264,7 @@ const ViewAllListing = () => {
                         overflow: 'hidden',
                         textOverflow: 'ellipsis',
                         display: '-webkit-box',
-                        WebkitLineClamp: 3,
+                        WebkitLineClamp: 1, //anhi adjust if you want the description to be ....
                         WebkitBoxOrient: 'vertical'
                       }}
                     >

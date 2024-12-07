@@ -30,7 +30,15 @@ export default function AddProduct() {
         const payload = JSON.parse(atob(token.split('.')[1]));
         const userId = payload.user_id;
 
-        // Create FormData object
+        // Debug logging
+        console.table({
+            'Token Present': !!token,
+            'User ID': userId,
+            'Product Title': data.product_title,
+            'File Present': !!file,
+            'Authorization Header': `Bearer ${token}`
+        });
+
         const formData = new FormData();
         formData.append('file', file);
         formData.append('userId', userId);
@@ -42,21 +50,24 @@ export default function AddProduct() {
         }));
 
         try {
-            const response = await axios.post('http://localhost:8080/products', formData, {
+            const response = await axios.post('http://localhost:8080/API/productlisting/create', formData, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     'Content-Type': 'multipart/form-data'
                 }
             });
-
+            console.log('Response:', response);
             setOpen(true);
         } catch (error) {
-            console.error(error);
+            console.error('Request details:', {
+                url: error.config.url,
+                method: error.config.method,
+                headers: error.config.headers,
+                data: error.config.data
+            });
             setError('Failed to create product');
         }
     };
-
-
 
 
     const handleChange = async (e) => {

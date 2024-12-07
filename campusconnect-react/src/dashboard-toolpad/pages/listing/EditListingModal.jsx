@@ -1,11 +1,13 @@
 import React from 'react';
-import { Dialog, DialogTitle, DialogContent, DialogActions, Button, TextField, MenuItem } from '@mui/material';
+import { Dialog, DialogTitle, DialogContent, DialogActions, Button, TextField, MenuItem , Typography} from '@mui/material';
 
 const CATEGORIES = [
-    { value: 'electronics', label: 'Electronics' },
-    { value: 'books', label: 'Books' },
-    { value: 'clothing', label: 'Clothing' },
-    { value: 'others', label: 'Others' }
+    { value: 'Electronics', label: 'Electronics' },
+    { value: 'Books', label: 'Books' },
+    { value: 'Clothing', label: 'Clothing' },
+    { value: 'Furniture', label: 'Furniture' },
+    { value: 'Toys', label: 'Toys' },
+    { value: 'Others', label: 'Others' }
 ];
 
 const EditListingModal = ({
@@ -23,13 +25,9 @@ const EditListingModal = ({
         });
     };
 
+
     return (
-        <Dialog
-            open={open}
-            onClose={onClose}
-            maxWidth="sm"
-            fullWidth
-        >
+        <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth>
             <DialogTitle>Edit Listing</DialogTitle>
             <DialogContent>
                 <TextField
@@ -78,16 +76,24 @@ const EditListingModal = ({
                         </MenuItem>
                     ))}
                 </TextField>
+
+                <Typography
+                    variant="subtitle1"
+                    sx={{
+                        mt: 2,
+                        pt: 2,
+                        borderTop: 1,
+                        borderColor: 'divider',
+                        color: 'text.secondary',
+                        fontStyle: 'italic'
+                    }}
+                >
+                    Posted by: {listingToEdit?.user?.name}
+                </Typography>
             </DialogContent>
             <DialogActions>
-                <Button onClick={onClose} color="primary">
-                    Cancel
-                </Button>
-                <Button
-                    onClick={onConfirmEdit}
-                    color="primary"
-                    variant="contained"
-                >
+                <Button onClick={onClose}>Cancel</Button>
+                <Button onClick={onConfirmEdit} variant="contained" color="primary">
                     Save Changes
                 </Button>
             </DialogActions>
