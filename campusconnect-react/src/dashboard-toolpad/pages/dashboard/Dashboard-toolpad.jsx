@@ -24,10 +24,12 @@ import PropTypes from "prop-types";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import MessageIcon from '../../../assets/chatIcon.json?url';
+import StoreIcon from '../../../assets/storeIcon.json?url';
 import {defineElement} from "@lordicon/element";
 import lottie from "lottie-web";
 import {jwtDecode} from "jwt-decode";
 import defaultAvatar from '../../../assets/smeagolAvatar.jpg?url';
+import Home from '../../../dashboard-toolpad/pages/home/Home.jsx';
 
 const demoTheme = createTheme({
     cssVariables: {
@@ -45,6 +47,25 @@ const demoTheme = createTheme({
     },
 });
 const NAVIGATION = [
+    {
+        kind: 'header',
+        title: 'Home',
+    },
+    {
+        segment: 'home', //where it is saved
+        title: 'Home | CampusConnect Listing',
+        icon: <lord-icon
+            trigger="hover"
+            src={StoreIcon}
+            style={{width: '32px', height: '32x'}}
+        >
+        </lord-icon> //use custom Icon
+        ,
+        component: Home, //see import
+    },
+    {
+        kind: 'divider',
+    },
     {
         kind: 'header',
         title: 'Options',
