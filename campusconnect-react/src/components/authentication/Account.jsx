@@ -2,20 +2,23 @@ import React, { useEffect, useState } from 'react';
 import { Avatar, Box, IconButton, Menu, MenuItem, Typography } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { jwtDecode} from 'jwt-decode';
+import defaultAvatar from '../../assets/smeagolAvatar.jpg?url';
 
 export default function Account() {
     const [anchorEl, setAnchorEl] = useState(null);
     const [userData, setUserData] = useState({
         name: '',
         email: '',
-        image: '/default-avatar.png'
+        image: defaultAvatar
     });
     const navigate = useNavigate();
 
     useEffect(() => {
+        console.log('Account component rendered');
         const token = localStorage.getItem('token');
         if (token) {
             const decoded = jwtDecode(token);
+            console.log('Decoded token:', decoded);
             setUserData({
                 name: decoded.name || 'User',
                 email: decoded.email,
@@ -23,6 +26,7 @@ export default function Account() {
             });
         }
     }, []);
+
 
     const handleMenu = (event) => {
         setAnchorEl(event.currentTarget);
@@ -38,7 +42,7 @@ export default function Account() {
     };
 
     return (
-        <Box sx={{ display: 'flex', alignItems: 'center' }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, px: 2}}>
             <IconButton onClick={handleMenu}>
                 <Avatar src={userData.image} alt={userData.name} />
             </IconButton>
@@ -53,6 +57,7 @@ export default function Account() {
                         {userData.email}
                     </Typography>
                 </Box>
+                <MenuItem onClick={handleClose}>Profile</MenuItem>
                 <MenuItem onClick={handleSignOut}>Sign Out</MenuItem>
             </Menu>
         </Box>

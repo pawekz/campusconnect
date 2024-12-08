@@ -26,6 +26,8 @@ import Typography from "@mui/material/Typography";
 import MessageIcon from '../../../assets/chatIcon.json?url';
 import {defineElement} from "@lordicon/element";
 import lottie from "lottie-web";
+import {jwtDecode} from "jwt-decode";
+import defaultAvatar from '../../../assets/smeagolAvatar.jpg?url';
 
 const demoTheme = createTheme({
     cssVariables: {
@@ -145,19 +147,57 @@ function DashboardLayoutBasic() {
 
     const navigate = useNavigate();
     const router = useDemoRouter('/dashboard');
-    const [session, setSession] = useState(() => {
+    const [session, setSession] = React.useState(() => {
         const token = localStorage.getItem('token');
         if (token) {
-            console.log('Token found in localStorage:', token);
-            return {
-                user: {
-                    token: token,
-                },
-            };
+            try {
+                const decoded = jwtDecode(token);
+                console.log('Decoded token:', decoded);
+                return {
+                    user: {
+                        name: decoded.sub || 'User',
+                        email: decoded.sub, // Using sub as email since that's what's in your token
+                        image: defaultAvatar,
+                        token: token
+                    },
+                };
+            } catch (error) {
+                console.error('Token decode error:', error);
+                return null;
+            }
         }
-        console.log('No token found in localStorage');
         return null;
     });
+
+
+    const authentication = React.useMemo(() => {
+        return {
+            signIn: (token) => {
+                try {
+                    const decoded = jwtDecode(token);
+                    console.log('SignIn decoded token:', decoded);
+                    setSession({
+                        user: {
+                            name: decoded.sub || 'User',
+                            email: decoded.sub,
+                            image: defaultAvatar,
+                            token: token
+                        },
+                    });
+                } catch (error) {
+                    console.error('SignIn token decode error:', error);
+                }
+            },
+            signOut: () => {
+                localStorage.removeItem('token');
+                setSession(null);
+                navigate('/signin');  // Add this line for redirection
+            },
+        };
+    }, [navigate]);
+
+
+
 
     useEffect(() => {
         const token = localStorage.getItem('token');
@@ -188,29 +228,6 @@ function DashboardLayoutBasic() {
         }
     }, [navigate]);
 
-    const authentication = React.useMemo(
-        () => ({
-            signIn: (userData) => {
-                console.log('User signed in:', userData);
-                localStorage.setItem('token', userData.token);
-                setSession({
-                    user: {
-                        name: userData.name,
-                        email: userData.email,
-                        /*image: userData.image || '/default-avatar.png',*/
-                        token: userData.token,
-                    },
-                });
-            },
-            signOut: () => {
-                console.log('User signed out');
-                localStorage.removeItem('token');
-                setSession(null);
-                navigate('/signin');
-            },
-        }),
-        [navigate]
-    );
 
     const pathSegments = router.pathname.split('/');
     const currentSegment = pathSegments[pathSegments.length - 1] || 'dashboard';
