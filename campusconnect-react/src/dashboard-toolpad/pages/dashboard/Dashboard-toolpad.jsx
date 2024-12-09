@@ -30,7 +30,7 @@ import lottie from "lottie-web";
 import {jwtDecode} from "jwt-decode";
 import defaultAvatar from '../../../assets/smeagolAvatar.jpg?url';
 import Home from '../../../dashboard-toolpad/pages/home/Home.jsx';
-import Transaction from '../../pages/transaction/Transaction.jsx';
+import Transaction from '../../pages/transaction/CommenceTransaction.jsx';
 
 const demoTheme = createTheme({
     cssVariables: {
