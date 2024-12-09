@@ -160,12 +160,17 @@ const NAVIGATION = [
     {
         segment: 'reports',
         title: 'Reports',
-        icon: <AnalyticsRoundedIcon />,
+        icon: <lord-icon
+            trigger="hover"
+            src={ReportIcon}
+            style={{width: '32px', height: '32x'}}
+        >
+        </lord-icon>,
         children: [
             {
                 segment: 'analytics',
                 title: 'Analytics',
-                icon: <AnalyticsRoundedIcon />,
+                icon: <AnalyticsRoundedIcon/>,
                 component: Analytics,
             },
         ],
