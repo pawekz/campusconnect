@@ -10,13 +10,13 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/transactions")
+@RequestMapping("/API/transactions")
 public class TransactionController {
 
     @Autowired
     private TransactionService transactionService;
 
-    @GetMapping
+    @GetMapping("/all")
     public List<TransactionEntity> getAllTransactions() {
         return transactionService.getAllTransactions();
     }
