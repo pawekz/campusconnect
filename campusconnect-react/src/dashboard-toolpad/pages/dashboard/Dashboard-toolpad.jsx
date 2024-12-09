@@ -30,6 +30,7 @@ import lottie from "lottie-web";
 import {jwtDecode} from "jwt-decode";
 import defaultAvatar from '../../../assets/smeagolAvatar.jpg?url';
 import Home from '../../../dashboard-toolpad/pages/home/Home.jsx';
+import Transaction from '../../pages/transaction/Transaction.jsx';
 
 const demoTheme = createTheme({
     cssVariables: {
@@ -62,6 +63,18 @@ const NAVIGATION = [
         </lord-icon> //use custom Icon
         ,
         component: Home, //see import
+    },
+    {
+        segment: 'transaction', //where it is saved, folder
+        title: 'Transaction',
+        icon: <lord-icon
+            trigger="hover"
+            src={StoreIcon}
+            style={{width: '32px', height: '32x'}}
+        >
+        </lord-icon> //use custom Icon
+        ,
+        component: Transaction, //see import
     },
     {
         kind: 'divider',

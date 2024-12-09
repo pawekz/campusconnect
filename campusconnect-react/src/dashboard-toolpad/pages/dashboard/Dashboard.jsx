@@ -122,6 +122,10 @@ function Dashboard() {
                                 data: pieChartData,
                                 highlightScope: { faded: 'global', highlighted: 'item' },
                                 faded: { innerRadius: 32, additionalRadius: -30 },
+                                paddingAngle: 1,
+                                cornerRadius: 6,
+                                innerRadius: 15,
+                                outerRadius: 180
                             },
                         ]}
                         height={400}
