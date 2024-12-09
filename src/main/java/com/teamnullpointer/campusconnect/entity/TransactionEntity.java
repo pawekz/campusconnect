@@ -27,7 +27,7 @@ public class TransactionEntity {
     private Date updatedAt;
 
     @Column(name = "status")
-    private String status;
+    private String status;  // "COMPLETE" or "FAILED" (options, linked it in frontend)
 
     @Column(name = "transaction_details")
     private String transactionDetails;
