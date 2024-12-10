@@ -12,7 +12,6 @@ import Message from '../messages/Message.jsx';
 import { createTheme } from '@mui/material/styles';
 import DashboardIcon from '../../../assets/dashboardIcon2.json?url';
 import ReportIcon from '../../../assets/reportIcon.json?url';
-import BarChartIcon from '@mui/icons-material/BarChart';
 import PeopleIcon from '../../../assets/peopleIcon.json?url';
 import AnalyticsRoundedIcon from '@mui/icons-material/AnalyticsRounded';
 import AddShoppingCartIcon from '../../../assets/listing.json?url';
@@ -32,6 +31,7 @@ import defaultAvatar from '../../../assets/smeagolAvatar.jpg?url';
 import Home from '../../../dashboard-toolpad/pages/home/Home.jsx';
 import Transaction from '../../pages/transaction/Transaction.jsx';
 import TransactionIcon from '../../../assets/transactionIcon.json?url';
+import AnalyticsIcon from '../../../assets/analyticsIcon.json?url';
 
 const demoTheme = createTheme({
     cssVariables: {
@@ -170,7 +170,12 @@ const NAVIGATION = [
             {
                 segment: 'analytics',
                 title: 'Analytics',
-                icon: <AnalyticsRoundedIcon/>,
+                icon: <lord-icon
+                    trigger="hover"
+                    src={AnalyticsIcon}
+                    style={{width: '32px', height: '32x'}}
+                >
+                </lord-icon>,
                 component: Analytics,
             },
         ],
@@ -187,54 +192,85 @@ function DashboardLayoutBasic() {
 
     const navigate = useNavigate();
     const router = useDemoRouter('/dashboard');
-    const [session, setSession] = React.useState(() => {
-        const token = localStorage.getItem('token');
-        if (token) {
+
+    //account top right side
+    /*session (useState):
+
+Stores the current user's authentication state
+Contains user data like name, email, and token
+Initializes on component mount by checking localStorage
+Acts as a reactive state that triggers re-renders when updated
+*/
+
+const [session, setSession] = React.useState(() => {
+    const token = localStorage.getItem('token');
+    if (token) {
+        try {
+            const decoded = jwtDecode(token);
+            const userData = {
+                user: {
+                    name: decoded.name,
+                    email: decoded.sub,
+                    image: defaultAvatar,
+                    token: token
+                },
+            };
+            console.table([{
+                name: userData.user.name,
+                email: userData.user.email,
+                tokenExists: !!userData.user.token
+            }]);
+            return userData;
+        } catch (error) {
+            console.error('Token decode error:', error);
+            return null;
+        }
+    }
+    return null;
+});
+
+
+/*authentication (useMemo):
+
+Contains methods to manage authentication
+Provides signIn function to authenticate users and update session
+Provides signOut function to clear session and redirect
+Memoized object that stays consistent between renders
+Handles token storage in localStorage
+Updates the session state through setSession*/
+
+const authentication = React.useMemo(() => {
+    return {
+        signIn: (token) => {
             try {
                 const decoded = jwtDecode(token);
-                console.log('Decoded token:', decoded);
-                return {
+                const userData = {
                     user: {
-                        name: decoded.sub || 'User',
-                        email: decoded.sub, // Using sub as email since that's what's in your token
+                        name: decoded.name,
+                        email: decoded.sub,
                         image: defaultAvatar,
                         token: token
                     },
                 };
+                localStorage.setItem('token', token); // Ensure token is saved
+                setSession(userData);
+                // Display updated session data
+                console.table([{
+                    name: userData.user.name,
+                    email: userData.user.email,
+                    tokenExists: !!userData.user.token
+                }]);
             } catch (error) {
-                console.error('Token decode error:', error);
-                return null;
+                console.error('SignIn token decode error:', error);
             }
-        }
-        return null;
-    });
-
-
-    const authentication = React.useMemo(() => {
-        return {
-            signIn: (token) => {
-                try {
-                    const decoded = jwtDecode(token);
-                    console.log('SignIn decoded token:', decoded);
-                    setSession({
-                        user: {
-                            name: decoded.sub || 'User',
-                            email: decoded.sub,
-                            image: defaultAvatar,
-                            token: token
-                        },
-                    });
-                } catch (error) {
-                    console.error('SignIn token decode error:', error);
-                }
-            },
-            signOut: () => {
-                localStorage.removeItem('token');
-                setSession(null);
-                navigate('/signin');  // Add this line for redirection
-            },
-        };
-    }, [navigate]);
+        },
+        signOut: () => {
+            localStorage.removeItem('token');
+            setSession(null);
+            navigate('/signin');
+        },
+    };
+}, [navigate]);
 
 
 

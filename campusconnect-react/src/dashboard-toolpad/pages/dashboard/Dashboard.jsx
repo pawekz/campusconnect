@@ -1,12 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { useDemoRouter } from '@toolpad/core/internal';
 import { PageContainer } from '@toolpad/core';
 import { Box, Card, Typography } from '@mui/material';
 import { PieChart } from '@mui/x-charts/PieChart';
+import CategoryListingsModal from "./CategoryListingModal.jsx";
 import axios from 'axios';
-import { Link } from '@mui/material'
-import ManageUser from '../users/ManageUser.jsx'
-import { useNavigate } from 'react-router-dom';
 
 function Dashboard() {
     const [stats, setStats] = useState({
@@ -15,6 +12,10 @@ function Dashboard() {
         activeListing: 0,
         popularCategoriesWithCount: []
     });
+    const [clickedItemData, setClickedItemData] = useState(null);
+    const [modalOpen, setModalOpen] = useState(false);
+    const [categoryListings, setCategoryListings] = useState([]);
+    const [currentIndex, setCurrentIndex] = useState(0);
 
     useEffect(() => {
         const token = localStorage.getItem('token');
@@ -34,7 +35,13 @@ function Dashboard() {
             .catch(error => console.error('Error fetching stats:', error));
     }, []);
 
+    const handleNext = () => {
+        setCurrentIndex((prev) => (prev + 1) % categoryListings.length);
+    };
 
+    const handlePrevious = () => {
+        setCurrentIndex((prev) => (prev - 1 + categoryListings.length) % categoryListings.length);
+    };
 
     const pieChartData = stats.popularCategoriesWithCount?.map(item => ({
         id: item.category,
@@ -60,7 +67,6 @@ function Dashboard() {
                             ? 'linear-gradient(135deg, #1a237e 0%, #283593 100%)'
                             : 'linear-gradient(135deg, #E3F2FD 0%, #BBDEFB 100%)',
                         '&:hover': {
-                            cursor: 'pointer',
                             transform: 'translateY(-2px)',
                             transition: 'transform 0.2s ease-in-out',
                             boxShadow: theme.shadows[4]
@@ -71,7 +77,6 @@ function Dashboard() {
                     <Typography>Total Number: {stats.totalUsers}</Typography>
                 </Card>
 
-
                 <Card
                     sx={(theme) => ({
                         p: 2,
@@ -81,7 +86,6 @@ function Dashboard() {
                             ? 'linear-gradient(135deg, #4a148c 0%, #6a1b9a 100%)'
                             : 'linear-gradient(135deg, #F3E5F5 0%, #E1BEE7 100%)',
                         '&:hover': {
-                            cursor: 'pointer',
                             transform: 'translateY(-2px)',
                             transition: 'transform 0.2s ease-in-out',
                             boxShadow: theme.shadows[4]
@@ -101,7 +105,6 @@ function Dashboard() {
                             ? 'linear-gradient(135deg, #1b5e20 0%, #2e7d32 100%)'
                             : 'linear-gradient(135deg, #E8F5E9 0%, #C8E6C9 100%)',
                         '&:hover': {
-                            cursor: 'pointer',
                             transform: 'translateY(-2px)',
                             transition: 'transform 0.2s ease-in-out',
                             boxShadow: theme.shadows[4]
@@ -113,8 +116,8 @@ function Dashboard() {
                 </Card>
             </Box>
 
-            <Card sx={{ p: 2, borderRadius: '8px',}}>
-                <Typography variant="h6" sx={{ mb: 2 }}>Popular Categories</Typography>
+            <Card sx={{ p: 2, borderRadius: '8px' }}>
+                <Typography variant="h4" sx={{ mb: 2 }}>Popular Categories - Listing</Typography>
                 <Box sx={{ height: 400, width: '100%' }}>
                     <PieChart
                         series={[
@@ -126,15 +129,49 @@ function Dashboard() {
                                 cornerRadius: 6,
                                 innerRadius: 15,
                                 outerRadius: 180
-                            },
+                            }
                         ]}
                         height={400}
+                        onItemClick={(event, params) => {
+                            // Log the click event details
+                            console.log('Pie segment clicked:', {
+                                event,
+                                params,
+                                elementIndex: params.dataIndex
+                            });
+
+                            const selectedCategory = pieChartData[params.dataIndex].label;
+                            const token = localStorage.getItem('token');
+
+                            axios.get(`http://localhost:8080/API/productlisting/category/${selectedCategory}`, {
+                                headers: { 'Authorization': `Bearer ${token}` }
+                            })
+                                .then(response => {
+                                    console.log('Category listings:', response.data);
+                                    setCategoryListings(response.data);
+                                    setCurrentIndex(0);
+                                    setModalOpen(true);
+                                })
+                                .catch(error => console.error('Error:', error));
+                        }}
                     />
+
                 </Box>
             </Card>
+
+            <CategoryListingsModal
+                open={modalOpen}
+                onClose={() => {
+                    setModalOpen(false);
+                    setClickedItemData(null);
+                }}
+                listings={categoryListings}
+                currentIndex={currentIndex}
+                onNext={handleNext}
+                onPrevious={handlePrevious}
+            />
         </PageContainer>
     );
 }
-
 
 export default Dashboard;
