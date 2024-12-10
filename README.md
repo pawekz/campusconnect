@@ -62,4 +62,11 @@ Jenelyn Mendoza<br>_
 8. **If it runs, congrats, if not, reload MAVEN project OR create [SCHEMA](https://www.jetbrains.com/help/idea/schemas.html#create_db_or_schema) (named ```campusconnect```)**
 
 
+Images: 
+
+![img.png](img.png)
+![img_1.png](img_1.png)
+![img_2.png](img_2.png)
+
+
 
