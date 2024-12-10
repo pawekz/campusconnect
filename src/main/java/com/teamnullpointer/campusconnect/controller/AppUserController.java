@@ -37,7 +37,7 @@ public class AppUserController {
         LoginResponse loginResponse = appUserService.loginAppUser(loginDTO);
         if (loginResponse.isSuccess()) {
             AppUserEntity appUser = appUserService.findByEmail(loginDTO.getEmail());
-            String token = JwtUtil.generateToken(loginDTO.getEmail(), appUser.getUserType(), appUser.getId());
+            String token = JwtUtil.generateToken(appUser.getName(), loginDTO.getEmail(), appUser.getUserType(), appUser.getId());
             return ResponseEntity.ok(new JwtResponse(token));
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");

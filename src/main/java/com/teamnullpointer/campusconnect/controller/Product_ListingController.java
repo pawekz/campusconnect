@@ -40,6 +40,11 @@ public class Product_ListingController {
         return products;
     }
 
+    @GetMapping("/category/{category}")
+    public List<Product_ListingEntity> getProductsByCategory(@PathVariable String category) {
+        return service.getProductsByCategory(category);
+    }
+
     @GetMapping("/{id}")
     public Optional<Product_ListingEntity> getProductById(@PathVariable int id) {
         return service.getProductById(id);

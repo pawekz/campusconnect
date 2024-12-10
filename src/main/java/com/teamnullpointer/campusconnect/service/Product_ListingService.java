@@ -45,4 +45,8 @@ public class Product_ListingService {
             throw new RuntimeException("Product not found with id: " + id);
         }
     }
+
+    public List<Product_ListingEntity> getProductsByCategory(String category) {
+        return repository.findByCategory(category);
+    }
 }
