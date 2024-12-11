@@ -30,8 +30,12 @@ import Transaction from '../../pages/transaction/Transaction.jsx';
 import TransactionIcon from '../../../assets/transactionIcon.json?url';
 import AnalyticsIcon from '../../../assets/analyticsIcon.json?url';
 import GearIcon from '../../../assets/settingsIcon.json?url';
+import RecentTransactionIcon from '../../../assets/transactionHistory.json?url';
+import ApproveTransactionIcon from '../../../assets/approveTransaction.json?url';
 import { AvatarGenerator } from 'random-avatar-generator';
 import ProfilePage from '../profile/ProfilePage.jsx';
+import RecentTransaction from '../../pages/transaction/Transaction.jsx';
+import PendingTransaction from '../../pages/transaction/PendingTransaction.jsx'
 
 const demoTheme = createTheme({
     cssVariables: {
@@ -97,7 +101,20 @@ const getNavigationItems = (userType) => {
             segment: 'transaction',
             title: 'Transaction',
             icon: <lord-icon trigger="hover" src={TransactionIcon} style={{width: '32px', height: '32x'}}></lord-icon>,
-            component: Transaction,
+            children: [
+                {
+                    segment: 'transaction',
+                    title: 'Recent Transaction',
+                    icon: <lord-icon trigger="hover" src={RecentTransactionIcon} style={{width: '32px', height: '32x'}}></lord-icon>,
+                    component: RecentTransaction,
+                },
+                {
+                    segment: 'transaction',
+                    title: 'Pending Transaction',
+                    icon: <lord-icon trigger="hover" src={ApproveTransactionIcon} style={{width: '32px', height: '32x'}}></lord-icon>,
+                    component: PendingTransaction,
+                },
+            ],
         },
         {
             kind: 'divider',
