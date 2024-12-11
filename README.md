@@ -49,53 +49,24 @@ Jenelyn Mendoza<br>_
     npm install
     ```
 
-6. **Install axios**:
-   ```sh
-   npm install axios
-   ```
-
-7. **Install MUI**:
-   ```sh
-   npm install @mui/material @emotion/react @emotion/styled
-   ```
-
-7.1 **Install MUI Icons Material**
-   ```sh
-   npm install @mui/icons-material
-   ```
-
-8. **Install React Router DOM**
-    ```sh
-    npm install react-router-dom
-    ```
-
-8.1 **Install React Buddy IDE Toolbox**
-   ```sh
-   npm install @react-buddy/ide-toolbox
-```
+6. In the configuration ([Environment Variables](https://www.jetbrains.com/help/objc/add-environment-variables-and-program-arguments.html#add-environment-variables), copy and paste and adjust accordingly especially the username and password):
+    ```LOGGING_LEVEL_ROOT=INFO;SERVER_PORT=8080;SPRING_APPLICATION_NAME=campusconnect;SPRING_DATASOURCE_PASSWORD=Iamroot96;SPRING_DATASOURCE_URL=jdbc:mysql://localhost:3306/campusconnect;SPRING_DATASOURCE_USERNAME=root;SPRING_JPA_HIBERNATE_DDL_AUTO=update;SPRING_JPA_SHOW_SQL=true```
 
 
-9 **In the `application.properties`, adjust the username / password**
-```
-spring.application.name=campusconnect
-
-spring.datasource.url=jdbc:mysql://localhost:3306/campusconnect
-spring.datasource.username=root
-spring.datasource.password=Iamroot96
-spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
-
-spring.jpa.hibernate.ddl-auto=create
-spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MySQLDialect
-```
-
-
-10. **In the `Current File` the configurations `ReactJS` and `CampusconnectApplication` are already setup, try to run each (CampusconnectApplication, then ReactJS)**
+7. **In the `Current File` the configurations `ReactJS` and `CampusconnectApplication` are already setup, try to run each (CampusconnectApplication, then ReactJS)**
 
 
 ![image](https://github.com/user-attachments/assets/5f85766f-99ec-423b-ae9b-b9984d12e888)
 
 
-11. **If it runs, congrats, if not, reload MAVEN project**
+8. **If it doesn't run, reload MAVEN project OR create [SCHEMA](https://www.jetbrains.com/help/idea/schemas.html#create_db_or_schema) (named ```campusconnect```)**
+
+
+Images: 
+
+![img.png](img.png)
+![img_1.png](img_1.png)
+![img_2.png](img_2.png)
 
 
 

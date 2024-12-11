@@ -47,6 +47,7 @@ public class TransactionService {
         // Update fields
         transaction.setUser(transactionDetails.getUser());
         transaction.setTransactionDetails(transactionDetails.getTransactionDetails());
+        transaction.setStatus(transactionDetails.getStatus());
 
         // Save and return the updated transaction
         return transactionRepository.save(transaction);

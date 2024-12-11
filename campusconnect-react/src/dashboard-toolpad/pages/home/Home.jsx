@@ -64,7 +64,6 @@ const Home = () => {
 
     const handleMessage = (e, sellerId) => {
         e.stopPropagation();
-        // Implement message functionality here
         console.log('Message seller with ID:', sellerId);
     };
 

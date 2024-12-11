@@ -37,7 +37,7 @@ public class AppUserController {
         LoginResponse loginResponse = appUserService.loginAppUser(loginDTO);
         if (loginResponse.isSuccess()) {
             AppUserEntity appUser = appUserService.findByEmail(loginDTO.getEmail());
-            String token = JwtUtil.generateToken(loginDTO.getEmail(), appUser.getUserType(), appUser.getId());
+            String token = JwtUtil.generateToken(appUser.getName(), loginDTO.getEmail(), appUser.getUserType(), appUser.getId());
             return ResponseEntity.ok(new JwtResponse(token));
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
@@ -60,6 +60,43 @@ public ResponseEntity<?> validateToken(@RequestHeader("Authorization") String au
     }
     return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
 }
+    @GetMapping("/profile/{id}")
+    public ResponseEntity<?> getUserProfile(@PathVariable int id, @RequestHeader("Authorization") String authHeader) {
+        // Extract user ID from JWT token
+        String token = authHeader.substring(7);
+        Claims claims = JwtUtil.validateToken(token);
+        Integer tokenUserId = claims.get("user_id", Integer.class);
+
+        // Only allow access if the requested profile matches the authenticated user
+        if (tokenUserId != null && tokenUserId == id) {
+            AppUserEntity user = appUserService.getUserById(Long.valueOf(id));
+            if (user != null) {
+                AppUserDTO userDTO = new AppUserDTO(
+                        user.getId(),
+                        user.getEmail(),
+                        null,
+                        user.getName(),
+                        user.getUserType()
+                );
+                return ResponseEntity.ok(userDTO);
+            }
+        }
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Access denied");
+    }
+
+
+    @PutMapping("/profile/{id}")
+    public ResponseEntity<?> updateUserProfile(
+            @PathVariable int id,
+            @RequestBody AppUserDTO userDTO
+    ) {
+        try {
+            appUserService.updateUser(Long.valueOf(id), userDTO);
+            return ResponseEntity.ok("ProfilePage updated successfully");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Error updating profile: " + e.getMessage());
+        }
+    }
 
 
     /*@PostMapping("/postuserrecord")

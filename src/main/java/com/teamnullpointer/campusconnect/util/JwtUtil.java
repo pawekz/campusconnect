@@ -15,8 +15,9 @@ public class JwtUtil {
     private static final long EXPIRATION_TIME = 1000 * 60 * 60 * 24; // 24 hours
     private static final Logger logger = LoggerFactory.getLogger(JwtUtil.class);
 
-    public static String generateToken(String email, String userType, int id) {
+    public static String generateToken(String name,String email, String userType, int id) {
         String token = Jwts.builder()
+                .claim("name", name)
                 .setSubject(email)
                 .claim("user_type", userType)
                 .claim("user_id", id)
