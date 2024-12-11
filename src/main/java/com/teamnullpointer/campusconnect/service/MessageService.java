@@ -1,10 +1,13 @@
 package com.teamnullpointer.campusconnect.service;
 
+import com.teamnullpointer.campusconnect.entity.AppUserEntity;
 import com.teamnullpointer.campusconnect.entity.MessageEntity;
 import com.teamnullpointer.campusconnect.repository.MessageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.util.List;
 import java.util.NoSuchElementException;
 
 @Service
@@ -37,4 +40,33 @@ public class MessageService {
             throw new NoSuchElementException("Message with id " + id + " not found");
         }
     }
+
+    public List<MessageEntity> getMessagesForUser(int userId) {
+        return messageRepository.findBySenderIdOrReceiverId(userId, userId);
+    }
+
+    public MessageEntity sendMessage(int senderId, int receiverId, String content) {
+        MessageEntity message = new MessageEntity();
+
+        // Create references to sender and receiver AppUserEntity objects
+        AppUserEntity sender = new AppUserEntity();
+        sender.setId(senderId);
+
+        AppUserEntity receiver = new AppUserEntity();
+        receiver.setId(receiverId);
+
+        // Set the relationships
+        message.setSender(sender);
+        message.setReceiver(receiver);
+        message.setContent(content);
+        message.setSent_at(LocalDateTime.now());
+
+        return messageRepository.save(message);
+    }
+
+
+    public List<MessageEntity> getChatHistoryBetweenUsers(int userId1, int userId2) {
+        return messageRepository.findBySenderIdAndReceiverIdOrReceiverIdAndSenderId(userId1, userId2, userId1, userId2);
+    }
+
 }

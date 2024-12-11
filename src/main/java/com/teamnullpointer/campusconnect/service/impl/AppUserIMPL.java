@@ -14,6 +14,8 @@ import org.springframework.stereotype.Service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.List;
+import java.util.stream.Collectors;
 
 
 @Service("appUserService")
@@ -115,5 +117,19 @@ public class AppUserIMPL implements AppUserService {
         }
 
         appUserRepository.save(user);
+    }
+
+    @Override
+    public List<AppUserDTO> getAllUsers() {
+        List<AppUserEntity> users = appUserRepository.findAll();
+        return users.stream()
+                .map(user -> new AppUserDTO(
+                        user.getId(),
+                        user.getEmail(),
+                        null,
+                        user.getName(),
+                        user.getUserType()
+                ))
+                .collect(Collectors.toList());
     }
 }

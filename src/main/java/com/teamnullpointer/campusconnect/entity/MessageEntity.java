@@ -14,11 +14,23 @@ public class MessageEntity {
     @JoinColumn(name = "user_id", referencedColumnName = "user_id")
     private AppUserEntity user;
 
+    @ManyToOne
+    @JoinColumn(name = "sender_id", referencedColumnName = "user_id")
+    private AppUserEntity sender;
+
+    @ManyToOne
+    @JoinColumn(name = "receiver_id", referencedColumnName = "user_id")
+    private AppUserEntity receiver;
+
+    @Column(name = "sender_id", insertable = false, updatable = false)
     private int sender_id;
+
+    @Column(name = "receiver_id", insertable = false, updatable = false)
     private int receiver_id;
+
+
     private String content;
     private LocalDateTime sent_at;
-
     public MessageEntity() {
     }
 
@@ -69,4 +81,15 @@ public class MessageEntity {
     public void setSent_at(LocalDateTime sent_at) {
         this.sent_at = sent_at;
     }
+
+    public void setSender(AppUserEntity sender) {
+        this.sender = sender;
+        this.sender_id = sender.getId();
+    }
+
+    public void setReceiver(AppUserEntity receiver) {
+        this.receiver = receiver;
+        this.receiver_id = receiver.getId();
+    }
+
 }

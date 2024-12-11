@@ -13,6 +13,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 
 @RestController
 @CrossOrigin
@@ -26,6 +28,12 @@ public class AppUserController {
     @GetMapping("/print")
     public String print() {
         return "User Controller";
+    }
+
+    @GetMapping("/all")
+    public ResponseEntity<List<AppUserDTO>> getAllUsers() {
+        List<AppUserDTO> users = appUserService.getAllUsers();
+        return ResponseEntity.ok(users);
     }
 
     @PostMapping(path = "/save")
