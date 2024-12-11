@@ -107,17 +107,13 @@ public class AppUserIMPL implements AppUserService {
         AppUserEntity user = appUserRepository.findById(Math.toIntExact(userId))
                 .orElseThrow(() -> new RuntimeException("User not found with id: " + userId));
 
-        user.setName(userDTO.getName());
-        user.setEmail(userDTO.getEmail());
-        user.setUserType(userDTO.getUser_type());
-
-        // Add password update logic
+        if (userDTO.getName() != null && !userDTO.getName().isEmpty()) {
+            user.setName(userDTO.getName());
+        }
         if (userDTO.getPassword() != null && !userDTO.getPassword().isEmpty()) {
             user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
         }
 
         appUserRepository.save(user);
     }
-
-
 }

@@ -43,6 +43,7 @@ const ProfilePage = ({ authentication }) => {
     const token = localStorage.getItem('token');
     const decoded = jwtDecode(token);
     const userId = decoded.user_id;
+    const [showAlert, setShowAlert] = useState(false);
 
     const handleSignOut = () => {
         localStorage.removeItem('token');
@@ -73,7 +74,7 @@ const ProfilePage = ({ authentication }) => {
     const onSubmit = async (data) => {
         try {
             await axios.put(`http://localhost:8080/user/profile/${userId}`, {
-                name: data.name,
+                name: profileData.name,  // This ensures the name is sent
                 password: data.password,
                 email: profileData.email,
                 user_type: profileData.userType
@@ -82,11 +83,13 @@ const ProfilePage = ({ authentication }) => {
                     'Authorization': `Bearer ${token}`
                 }
             });
-            setOpen(true);
+            setShowAlert(true);
+            setTimeout(() => setShowAlert(false), 3000);
         } catch (error) {
             setError('Failed to update profile');
         }
     };
+
 
     const handleClose = () => {
         setOpen(false);
@@ -101,7 +104,11 @@ const ProfilePage = ({ authentication }) => {
                         PROFILE MANAGEMENT
                     </Typography>
                     {error && <Alert severity="error" onClose={() => setError('')}>{error}</Alert>}
-
+                    {showAlert &&
+                        <Alert severity="success" sx={{ mb: 2 }}>
+                            Profile updated successfully!
+                        </Alert>
+                    }
                     <Grid container spacing={3}>
                         <Grid item xs={12} md={4}>
                             <Card>
