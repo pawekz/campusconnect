@@ -111,7 +111,13 @@ public class AppUserIMPL implements AppUserService {
         user.setEmail(userDTO.getEmail());
         user.setUserType(userDTO.getUser_type());
 
+        // Add password update logic
+        if (userDTO.getPassword() != null && !userDTO.getPassword().isEmpty()) {
+            user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
+        }
+
         appUserRepository.save(user);
     }
+
 
 }

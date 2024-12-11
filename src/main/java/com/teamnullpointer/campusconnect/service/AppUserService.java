@@ -26,4 +26,5 @@ public interface AppUserService {
     AppUserEntity getUserById(Long userId);
 
     void updateUser(Long userId, AppUserDTO userDTO);
+
 } //reupload
