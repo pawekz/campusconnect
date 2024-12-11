@@ -1,7 +1,7 @@
 package com.teamnullpointer.campusconnect.entity;
 
 import jakarta.persistence.*;
-
+import java.time.LocalDateTime;
 import java.math.BigDecimal;
 
 @Entity
@@ -20,6 +20,19 @@ public class AnalyticsEntity {
 
     @Column(name = "total_earnings")
     private BigDecimal totalEarnings;
+
+    @Column(name = "created_at")
+    private LocalDateTime createdAt;
+
+    // Add getter and setter for createdAt
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
 
 
     public int getId() {

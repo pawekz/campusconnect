@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -87,4 +88,14 @@ public class AnalyticsService {
                 .map(user -> new AppUserDTO(user.getId(), user.getEmail(), user.getPassword(), user.getName(), user.getUserType()))
                 .collect(Collectors.toList());
     }
+
+    public List<Integer> getListingCountsByMonth() {
+        List<Integer> counts = new ArrayList<>();
+        for (int month = 1; month <= 12; month++) {
+            Integer count = repository.findCountByMonth(month);
+            counts.add(count != null ? count : 0);
+        }
+        return counts;
+    }
+
 }
