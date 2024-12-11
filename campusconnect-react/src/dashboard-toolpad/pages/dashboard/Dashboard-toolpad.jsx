@@ -104,26 +104,13 @@ const getNavigationItems = (userType) => {
         },
         {
             kind: 'header',
-            title: 'Review',
-        },
-        {
-            segment: 'analytics',
-            title: 'Analytics',
-            icon: <lord-icon trigger="hover" src={AnalyticsIcon} style={{width: '32px', height: '32x'}}></lord-icon>,
-            component: Analytics,
-        },
-        {
-            kind: "divider"
-        },
-        {
-            kind: 'header',
-            title: 'ProfilePage',
+            title: 'Profile',
         },
         {
             segment: 'profile',
             title: 'Profile Management',
             icon: <lord-icon trigger="hover" src={GearIcon} style={{width: '32px', height: '32x'}}></lord-icon>,
-            component: () => <ProfilePage authentication={authentication} />
+            component: () => <ProfilePage authentication={authentication} /> //connector that ensures the profile page has access to all the necessary user authentication features.
         }
     ];
     //only of the user_id is admin ray maka access to the dashboard
@@ -140,9 +127,20 @@ const getNavigationItems = (userType) => {
                 title: 'User Management',
                 icon: <lord-icon trigger="hover" src={PeopleIcon} style={{width: '32px', height: '32x'}}></lord-icon>,
                 component: ManageUser,
+            },
+            {
+                kind: 'header',
+                title: 'Review',
+            },
+            {
+                segment: 'analytics',
+                title: 'Analytics',
+                icon: <lord-icon trigger="hover" src={AnalyticsIcon} style={{width: '32px', height: '32x'}}></lord-icon>,
+                component: Analytics,
             }
         );
     }
+
 
     return baseNavigation;
 };
