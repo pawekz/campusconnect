@@ -95,9 +95,6 @@ const ViewAllListing = () => {
   }, []);
 
 
-
-
-
   const textFieldRef = useRef(null);
 
   const handleEditPrompt = (listing) => {
@@ -110,6 +107,7 @@ const ViewAllListing = () => {
     });
     setOpenEditDialog(true);
   };
+
 
   const handleConfirmEdit = () => {
     const token = localStorage.getItem('token');
@@ -279,10 +277,10 @@ const ViewAllListing = () => {
                     >
                       <Tooltip title="Edit Listing">
                         <IconButton
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            handleEditPrompt(listing);
-                          }}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleEditPrompt(listing);
+                            }}
                         >
                           <EditIcon />
                         </IconButton>
@@ -317,13 +315,14 @@ const ViewAllListing = () => {
       />
 
       <EditListingModal
-        open={openEditDialog}
-        onClose={() => setOpenEditDialog(false)}
-        listingToEdit={listingToEdit}
-        editFormData={editFormData}
-        setEditFormData={setEditFormData}
-        onConfirmEdit={handleConfirmEdit}
+          open={openEditDialog}
+          onClose={() => setOpenEditDialog(false)}
+          listingToEdit={listingToEdit}
+          editFormData={editFormData}
+          setEditFormData={setEditFormData}
+          onConfirmEdit={handleConfirmEdit}
       />
+
 
       <Dialog
         open={openDetailDialog}
