@@ -44,13 +44,23 @@ export default function AddProduct() {
     };
 
     const onSubmit = async (data) => {
-        data.image = file; // Add the image URL to the form data
+        data.image = file;
         try {
-            await axios.post('http://localhost:8080/products', data);
+            const productResponse = await axios.post('http://localhost:8080/products', data);
+
+            // Create chat token after product is created
+            const chatData = {
+                sender_id: JSON.parse(localStorage.getItem('user')).id, // Current user
+                receiver_id: productResponse.data.userId, // Product owner's ID
+                product_id: productResponse.data.id
+            };
+
+            await axios.post('http://localhost:8080/message/createChatToken', chatData);
+
             fetchProducts();
-            setOpen(true); // Open the modal on successful product creation
+            setOpen(true);
         } catch (error) {
-            console.error('Error creating product:', error);
+            console.error('Error:', error);
         }
     };
 
