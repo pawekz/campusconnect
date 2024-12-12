@@ -6,6 +6,12 @@ import {
   Autocomplete, Dialog, DialogTitle, DialogContent, DialogActions
 } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
+import lottie from "lottie-web";
+import SendIcon from '../../../assets/sendIcon.json?url'
+import {defineElement} from "@lordicon/element";
+
+
+defineElement(lottie.animation);
 
 // Token helper function
 const getCurrentUserId = () => {
@@ -291,17 +297,28 @@ const Message = () => {
                           >
                             <Box sx={{
                               backgroundColor: message.sender_id === currentUserId
-                                  ? theme.palette.primary.main
-                                  : theme.palette.grey[200],
+                                  ? theme.palette.primary.main  // Keep primary color for sender
+                                  : theme.palette.mode === 'dark'
+                                      ? theme.palette.grey[800]   // Darker background for received messages in dark mode
+                                      : theme.palette.grey[200],  // Light background for received messages in light mode
+                              color: message.sender_id === currentUserId
+                                  ? '#ffffff'                   // White text for sender's messages
+                                  : theme.palette.text.primary, // Theme-aware text color for received messages
                               borderRadius: '8px',
                               padding: '10px',
-                              maxWidth: '70%'
+                              maxWidth: '70%',
+                              '& .MuiListItemText-secondary': {
+                                color: message.sender_id === currentUserId
+                                    ? 'rgba(255, 255, 255, 0.7)'  // Semi-transparent white for sender's timestamp
+                                    : theme.palette.text.secondary // Theme-aware color for received message timestamp
+                              }
                             }}>
                               <ListItemText
                                   primary={message.content}
                                   secondary={new Date(message.sent_at).toLocaleString()}
                               />
                             </Box>
+
                           </ListItem>
                       ))}
                     </List>
@@ -314,14 +331,17 @@ const Message = () => {
                         placeholder="Type a message..."
                         onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
                     />
-                    <Button variant="contained" onClick={handleSendMessage}>
-                      Send
-                    </Button>
+                    <lord-icon
+                        trigger="hover"
+                        src={SendIcon}
+                        style={{width: '40px', height: '40px', cursor: 'pointer'}}
+                        onClick={handleSendMessage}
+                    />
                   </Box>
                 </>
             ) : (
-                <Typography variant="h6" sx={{ textAlign: 'center', mt: 4 }}>
-                  Select a user to start chatting
+                <Typography variant="h6" sx={{textAlign: 'center', mt: 4}}>
+                Select a user to start chatting
                 </Typography>
             )}
           </Box>

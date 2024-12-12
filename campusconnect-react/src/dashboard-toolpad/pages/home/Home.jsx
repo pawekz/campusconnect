@@ -24,6 +24,7 @@ import { useTheme } from '@mui/material/styles';
 import {defineElement} from "@lordicon/element";
 import lottie from "lottie-web";
 import EditProfileIcon from "../../../assets/editProfile3.json";
+import MessageModal from '../messages/MessageModal.jsx'
 
 defineElement(lottie.animation);
 
@@ -35,6 +36,9 @@ const Home = () => {
     const [openDetailDialog, setOpenDetailDialog] = useState(false);
     const [searchQuery, setSearchQuery] = useState('');
     const textFieldRef = useRef(null);
+
+    const [openMessageModal, setOpenMessageModal] = useState(false);
+    const [selectedSeller, setSelectedSeller] = useState(null);
 
     useEffect(() => {
         const fetchListings = async () => {
@@ -62,9 +66,11 @@ const Home = () => {
         setOpenDetailDialog(true);
     };
 
-    const handleMessage = (e, sellerId) => {
+    const handleMessage = (e, listing) => {
         e.stopPropagation();
-        console.log('Message seller with ID:', sellerId);
+        console.log('Message seller with ID:', listing.user.id);
+        setSelectedSeller(listing);
+        setOpenMessageModal(true);
     };
 
     const filteredListings = listings.filter(listing =>
@@ -73,6 +79,15 @@ const Home = () => {
         listing.category.toLowerCase().includes(searchQuery.toLowerCase())
     );
 
+    // Add this helper function
+    const getCurrentUserId = () => {
+        const token = localStorage.getItem('token');
+        if (token) {
+            const payload = JSON.parse(atob(token.split('.')[1]));
+            return payload.user_id;
+        }
+        return null;
+    };
 
     return (
         <PageContainer>
@@ -146,7 +161,7 @@ const Home = () => {
                                         </Typography>
                                         <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 'auto' }}>
                                             <Tooltip title="Message Seller">
-                                                <IconButton onClick={(e) => handleMessage(e, listing.user.id)} color="primary">
+                                                <IconButton onClick={(e) => handleMessage(e, listing)} color="primary">
                                                     <MessageIcon />
                                                 </IconButton>
                                             </Tooltip>
@@ -194,6 +209,12 @@ const Home = () => {
                     </>
                 )}
             </Dialog>
+            <MessageModal
+                open={openMessageModal}
+                onClose={() => setOpenMessageModal(false)}
+                listing={selectedSeller}
+                currentUserId={getCurrentUserId()} // Pass the current user's ID
+            />
         </PageContainer>
     );
 };
