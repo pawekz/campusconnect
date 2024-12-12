@@ -195,29 +195,74 @@ const Message = () => {
                   <Typography variant="subtitle1" gutterBottom>
                     {selectedUser.name}'s Listings
                   </Typography>
-                  <List>
+                  <List sx={{
+                    maxHeight: '360px',
+                    overflowY: 'auto',
+                    '&::-webkit-scrollbar': {
+                      width: '8px'
+                    },
+                    '&::-webkit-scrollbar-track': {
+                      background: '#f1f1f1',
+                      borderRadius: '4px'
+                    },
+                    '&::-webkit-scrollbar-thumb': {
+                      background: '#888',
+                      borderRadius: '4px',
+                      '&:hover': {
+                        background: '#555'
+                      }
+                    }
+                  }}>
                     {userListings.map((listing) => (
-                        <ListItem
-                            key={listing.id}
-                            onClick={() => handleListingClick(listing)}
+                      <ListItem
+                        key={listing.id}
+                        onClick={() => handleListingClick(listing)}
+                        sx={{
+                          border: 1,
+                          borderColor: 'grey.300',
+                          borderRadius: 2,
+                          mb: 1,
+                          cursor: 'pointer',
+                          display: 'flex',
+                          justifyContent: 'space-between',
+                          alignItems: 'center',
+                          boxShadow: 1,
+                          '&:hover': {
+                            bgcolor: theme.palette.action.hover,
+                            transform: 'translateX(4px)',
+                            transition: 'transform 0.2s ease-in-out'
+                          }
+                        }}
+                      >
+                        <ListItemText
+                            primary={listing.product_title}
+                            secondary={`₱${listing.price}`}
                             sx={{
-                              borderRadius: 1,
-                              mb: 1,
-                              cursor: 'pointer',
-                              '&:hover': {
-                                bgcolor: theme.palette.action.hover
+                              '& .MuiListItemText-primary': {
+                                display: '-webkit-box',
+                                WebkitLineClamp: 1,
+                                WebkitBoxOrient: 'vertical',
+                                overflow: 'hidden'
                               }
                             }}
-                        >
-                          <ListItemText
-                              primary={listing.product_title}
-                              secondary={`₱${listing.price}`}
-                          />
-                        </ListItem>
+                        />
+                        <Box
+                          component="img"
+                          src={`http://localhost:5173${listing.image}`}
+                          alt={listing.product_title}
+                          sx={{
+                            width: 60,
+                            height: 60,
+                            borderRadius: 1,
+                            objectFit: 'cover',
+                            ml: 2
+                          }}
+                        />
+                      </ListItem>
                     ))}
                   </List>
                 </>
-            )}
+              )}
           </Box>
 
           {/* Right Panel - Chat Area */}
