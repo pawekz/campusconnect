@@ -276,6 +276,9 @@ const Message = () => {
           }}>
             {selectedUser ? (
                 <>
+                  <Typography variant="h6" sx={{ mb: 2, borderBottom: 1, borderColor: 'divider', pb: 1 }}>
+                    Chatting with {selectedUser.name}
+                  </Typography>
                   <Box sx={{ flexGrow: 1, overflowY: 'auto', mb: 2 }}>
                     <List>
                       {messages.map((message) => (
