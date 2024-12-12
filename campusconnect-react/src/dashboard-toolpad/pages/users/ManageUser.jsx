@@ -18,16 +18,36 @@ defineElement(lottie.animation);
 
 const StyledDataGrid = styled(DataGrid)(({ theme }) => ({
   '& .MuiDataGrid-columnHeaders': {
-    backgroundColor: theme.palette.mode === 'dark' ? theme.palette.grey[900] : theme.palette.grey[100],
-    color: theme.palette.mode === 'dark' ? theme.palette.common.white : theme.palette.common.black,
+    backgroundColor: theme.palette.mode === 'dark'
+        ? theme.palette.primary.dark
+        : theme.palette.primary.light,
+    color: theme.palette.mode === 'dark'
+        ? theme.palette.common.white
+        : theme.palette.primary.main,
+    fontSize: '1.2rem',
+    fontWeight: 500,
+    borderBottom: `2px solid ${theme.palette.primary.main}`,
   },
   '& .MuiDataGrid-columnHeaderTitle': {
     fontWeight: 'bold',
+    textTransform: 'uppercase',
+    letterSpacing: '0.5px',
   },
   '& .MuiDataGrid-row:nth-of-type(odd)': {
-    backgroundColor: theme.palette.action.hover,
+    backgroundColor: theme.palette.mode === 'dark'
+        ? theme.palette.grey[900]
+        : theme.palette.grey[50],
   },
+  '& .MuiDataGrid-row:hover': {
+    backgroundColor: theme.palette.action.hover,
+    cursor: 'pointer',
+  },
+  '& .MuiDataGrid-cell': {
+    borderBottom: `1px solid ${theme.palette.divider}`,
+    padding: '5px 10px',
+  }
 }));
+
 
 export default function ManageUser() {
   const [users, setUsers] = useState([]);
@@ -129,7 +149,7 @@ export default function ManageUser() {
     { field: 'id', headerName: 'ID', width: 90 },
     { field: 'name', headerName: 'Name', width: 240 },
     { field: 'email', headerName: 'Email', width: 240 },
-    { field: 'user_type', headerName: 'User Type', width: 120 },
+    { field: 'user_type', headerName: 'User Type', width: 160 },
     {
       field: 'actions',
       headerName: 'Actions',

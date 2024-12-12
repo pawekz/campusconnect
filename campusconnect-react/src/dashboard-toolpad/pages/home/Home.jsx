@@ -132,7 +132,7 @@ const Home = () => {
                                         <Typography variant="subtitle2" sx={{ mb: 1, color: theme.palette.text.secondary }}>
                                             Seller: {listing.user.name}
                                         </Typography>
-                                        <Typography variant="h6" sx={{ mb: 1, overflow: 'hidden', textOverflow: 'ellipsis', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical' }}>
+                                        <Typography variant="h6" sx={{ mb: 1, overflow: 'hidden', textOverflow: 'ellipsis', display: '-webkit-box', WebkitLineClamp: 1, WebkitBoxOrient: 'vertical', color: theme.palette.primary.main, fontWeight: '500' }}>
                                             {listing.product_title}
                                         </Typography>
                                         <Typography variant="h6" sx={{ mb: 1 }}>

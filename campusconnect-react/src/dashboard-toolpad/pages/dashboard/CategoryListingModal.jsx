@@ -69,7 +69,7 @@ const CategoryListingsModal = ({
                                 padding: 2,
                                 height: 250 // Fixed content height
                             }}>
-                                <Typography variant="h6">
+                                <Typography variant="h6" sx={{color: theme.palette.primary.main, fontWeight: '500'}}>
                                     {listings[currentIndex].product_title}
                                 </Typography>
                                 <Typography variant="h6" sx={{ mt: 1 }}>

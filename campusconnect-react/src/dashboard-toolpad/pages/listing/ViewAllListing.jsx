@@ -23,6 +23,12 @@ import EditListingModal from './EditListingModal.jsx';
 import { TextField, InputAdornment } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import { useTheme } from '@mui/material/styles';
+import lottie from "lottie-web";
+import EditProfileIcon from '../../../assets/editProfile3.json?url';
+import DeleteProfileIcon from '../../../assets/deleteProfile2.json?url';
+import {defineElement} from "@lordicon/element";
+
+defineElement(lottie.animation);
 
 const ViewAllListing = () => {
   const theme = useTheme();
@@ -243,8 +249,10 @@ const ViewAllListing = () => {
                         overflow: 'hidden',
                         textOverflow: 'ellipsis',
                         display: '-webkit-box',
-                        WebkitLineClamp: 2,
-                        WebkitBoxOrient: 'vertical'
+                        WebkitLineClamp: 1,
+                        WebkitBoxOrient: 'vertical',
+                        fontWeight: '500',
+                        color: theme.palette.primary.main
                       }}
                     >
                       {listing.product_title}

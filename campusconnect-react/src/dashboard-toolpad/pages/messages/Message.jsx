@@ -1,9 +1,13 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { PageContainer } from "@toolpad/core/PageContainer";
 import axios from 'axios';
-import { TextField, Button, List, ListItem, ListItemText, Box, Typography, Autocomplete } from '@mui/material';
+import {
+  TextField, Button, List, ListItem, ListItemText, Box, Typography,
+  Autocomplete, Dialog, DialogTitle, DialogContent, DialogActions
+} from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 
+// Token helper function
 const getCurrentUserId = () => {
   const token = localStorage.getItem('token');
   if (token) {
@@ -14,31 +18,37 @@ const getCurrentUserId = () => {
 };
 
 const Message = () => {
+  // State declarations
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState('');
   const [users, setUsers] = useState([]);
   const [selectedUser, setSelectedUser] = useState(null);
+  const [userListings, setUserListings] = useState([]);
+  const [selectedListing, setSelectedListing] = useState(null);
+  const [openDetailDialog, setOpenDetailDialog] = useState(false);
+  const [openConfirmDialog, setOpenConfirmDialog] = useState(false);
+
   const messagesEndRef = useRef(null);
   const theme = useTheme();
-
   const token = localStorage.getItem('token');
   const currentUserId = getCurrentUserId();
 
+  // Data fetching effects
   useEffect(() => {
     fetchUsers();
     if (selectedUser) {
       fetchMessages();
+      fetchUserListings();
       const interval = setInterval(fetchMessages, 3000);
       return () => clearInterval(interval);
     }
   }, [selectedUser]);
 
+  // API calls
   const fetchUsers = async () => {
     try {
       const response = await axios.get('http://localhost:8080/user/all', {
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
+        headers: { 'Authorization': `Bearer ${token}` }
       });
       setUsers(response.data);
     } catch (error) {
@@ -50,12 +60,8 @@ const Message = () => {
     if (!selectedUser) return;
     try {
       const response = await axios.get(
-        `http://localhost:8080/message/history?userId1=${currentUserId}&userId2=${selectedUser.id}`,
-        {
-          headers: {
-            'Authorization': `Bearer ${token}`
-          }
-        }
+          `http://localhost:8080/message/history?userId1=${currentUserId}&userId2=${selectedUser.id}`,
+          { headers: { 'Authorization': `Bearer ${token}` } }
       );
       setMessages(response.data);
     } catch (error) {
@@ -63,25 +69,41 @@ const Message = () => {
     }
   };
 
+  const fetchUserListings = async () => {
+    if (!selectedUser) return;
+    try {
+      const response = await axios.get('http://localhost:8080/API/productlisting/all', {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      });
+      const filteredListings = response.data.filter(listing =>
+          listing.user?.id === selectedUser.id
+      );
+      setUserListings(filteredListings);
+    } catch (error) {
+      console.error('Error fetching user listings:', error);
+    }
+  };
+
+  // Event handlers
   const handleSendMessage = async () => {
     if (!newMessage.trim() || !selectedUser) return;
-
-    const messageData = {
-      sender_id: currentUserId,
-      receiver_id: selectedUser.id,
-      content: newMessage
-    };
-
     try {
       await axios.post(
-        'http://localhost:8080/message/send',
-        messageData,
-        {
-          headers: {
-            'Authorization': `Bearer ${token}`,
-            'Content-Type': 'application/json'
+          'http://localhost:8080/message/send',
+          {
+            sender_id: currentUserId,
+            receiver_id: selectedUser.id,
+            content: newMessage
+          },
+          {
+            headers: {
+              'Authorization': `Bearer ${token}`,
+              'Content-Type': 'application/json'
+            }
           }
-        }
       );
       setNewMessage('');
       fetchMessages();
@@ -90,175 +112,238 @@ const Message = () => {
     }
   };
 
+  const handleListingClick = (listing) => {
+    setSelectedListing(listing);
+    setOpenDetailDialog(true);
+  };
+
+  const handleAcceptListing = () => {
+    setOpenConfirmDialog(true);
+  };
+
+  const handleConfirmAccept = async () => {
+    try {
+      const transactionData = {
+        userId: currentUserId,
+        productListingId: selectedListing.id,
+        transactionDetails: `Purchase of ${selectedListing.product_title} for ₱${selectedListing.price}`
+      };
+
+      console.table({
+        'Buyer ID': currentUserId,
+        'Product ID': selectedListing.id,
+        'Product Title': selectedListing.product_title,
+        'Price': selectedListing.price
+      });
+
+      const response = await axios.post(
+          'http://localhost:8080/API/transactions/create',  // Updated endpoint
+          transactionData,
+          {
+            headers: {
+              'Authorization': `Bearer ${token}`,
+              'Content-Type': 'application/json'
+            }
+          }
+      );
+
+      console.table(response.data);  // Log the created transaction
+
+      setOpenConfirmDialog(false);
+      setOpenDetailDialog(false);
+      setSelectedListing(null);
+      await fetchUserListings(); //await is pause execution until a promise is resolved
+    } catch (error) {
+      console.error('Transaction creation error:', error);
+    }
+  };
+
+  // Main render
   return (
-    <PageContainer>
-      <Box sx={{
-        display: 'flex',
-        height: '80vh',
-        gap: 2,
-        p: 2,
-        bgcolor: theme.palette.background.default,
-        color: theme.palette.text.primary
-      }}>
+      <PageContainer>
         <Box sx={{
-          width: '30%',
-          borderRight: 1,
-          borderColor: theme.palette.divider,
-          bgcolor: theme.palette.background.paper,
-          borderRadius: 1,
-          p: 2
-        }}>
-          <Typography variant="h6" gutterBottom>Users</Typography>
-          <Autocomplete
-            options={users}
-            getOptionLabel={(option) => option.name}
-            onChange={(_, newValue) => setSelectedUser(newValue)}
-            renderInput={(params) => (
-              <TextField
-                {...params}
-                label="Search Users"
-                sx={{
-                  '& .MuiInputBase-root': {
-                    color: theme.palette.text.primary,
-                    bgcolor: theme.palette.background.paper
-                  }
-                }}
-              />
-            )}
-            sx={{ mb: 2 }}
-          />
-
-          {selectedUser && (
-            <List sx={{ bgcolor: theme.palette.background.paper }}>
-              {messages.map((message) => (
-                <ListItem
-                  key={message.id}
-                  sx={{
-                    borderRadius: 1,
-                    mb: 1,
-                    bgcolor: theme.palette.mode === 'dark'
-                      ? theme.palette.grey[800]
-                      : theme.palette.grey[100]
-                  }}
-                >
-                  <ListItemText
-                    primary={message.sender_id === currentUserId ? 'You' : selectedUser.name}
-                    secondary={new Date(message.sent_at).toLocaleString()}
-                    sx={{
-                      '& .MuiListItemText-secondary': {
-                        color: theme.palette.text.secondary
-                      }
-                    }}
-                  />
-                </ListItem>
-              ))}
-            </List>
-          )}
-        </Box>
-
-        <Box sx={{
-          width: '70%',
           display: 'flex',
-          flexDirection: 'column',
-          bgcolor: theme.palette.background.paper,
-          borderRadius: 1,
-          p: 2
+          height: '80vh',
+          gap: 2,
+          p: 2,
+          bgcolor: theme.palette.background.default,
+          color: theme.palette.text.primary
         }}>
-          {selectedUser ? (
-            <>
-              <Typography variant="h6" gutterBottom>
-                Chat with {selectedUser.name}
-              </Typography>
-              <Box sx={{ flexGrow: 1, overflowY: 'auto', mb: 2 }}>
-                <List>
-                  {messages.map((message) => (
-                    <ListItem
-                      key={message.id}
-                      sx={{
-                        display: 'flex',
-                        justifyContent: message.sender_id === currentUserId ? 'flex-end' : 'flex-start'
-                      }}
-                    >
-                      <Box sx={{
-                        backgroundColor: message.sender_id === currentUserId
-                            ? theme.palette.primary.main
-                            : theme.palette.mode === 'dark'
-                                ? theme.palette.grey[800]
-                                : theme.palette.grey[200],
-                        color: message.sender_id === currentUserId || theme.palette.mode === 'dark'
-                            ? theme.palette.common.white
-                            : theme.palette.text.primary,
-                        borderRadius: '8px',
-                        padding: '10px',
-                        maxWidth: '70%',
-                        wordWrap: 'break-word',  // Add this
-                        overflowWrap: 'break-word',  // Add this
-                      }}>
-                        <ListItemText
-                            primary={message.content}
-                            primaryTypographyProps={{ // Add this
-                              sx: {
-                                wordWrap: 'break-word',
-                                overflowWrap: 'break-word'
-                              }
-                            }}
-                            secondary={new Date(message.sent_at).toLocaleString()}
+          {/* Left Panel - Users and Listings */}
+          <Box sx={{
+            width: '30%',
+            borderRight: 1,
+            borderColor: theme.palette.divider,
+            bgcolor: theme.palette.background.paper,
+            borderRadius: 1,
+            p: 2
+          }}>
+            <Typography variant="h6" gutterBottom>Users</Typography>
+            <Autocomplete
+                options={users}
+                getOptionLabel={(option) => option.name}
+                onChange={(_, newValue) => setSelectedUser(newValue)}
+                renderInput={(params) => (
+                    <TextField {...params} label="Search Users" />
+                )}
+                sx={{ mb: 2 }}
+            />
+
+            {/* User Listings */}
+            {selectedUser && userListings.length > 0 && (
+                <>
+                  <Typography variant="subtitle1" gutterBottom>
+                    {selectedUser.name}'s Listings
+                  </Typography>
+                  <List>
+                    {userListings.map((listing) => (
+                        <ListItem
+                            key={listing.id}
+                            onClick={() => handleListingClick(listing)}
                             sx={{
-                              '& .MuiListItemText-secondary': {
-                                color: message.sender_id === currentUserId || theme.palette.mode === 'dark'
-                                    ? theme.palette.common.white
-                                    : theme.palette.text.secondary
+                              borderRadius: 1,
+                              mb: 1,
+                              cursor: 'pointer',
+                              '&:hover': {
+                                bgcolor: theme.palette.action.hover
                               }
                             }}
-                        />
-                      </Box>
-                    </ListItem>
-                  ))}
-                  <div ref={messagesEndRef} />
-                </List>
-              </Box>
-              <Box sx={{ display: 'flex', gap: 1 }}>
-                <TextField
-                  fullWidth
-                  value={newMessage}
-                  onChange={(e) => setNewMessage(e.target.value)}
-                  placeholder="Type a message..."
-                  onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
-                  sx={{
-                    '& .MuiInputBase-root': {
-                      bgcolor: theme.palette.background.default
-                    }
-                  }}
-                />
-                <Button
-                  variant="contained"
-                  onClick={handleSendMessage}
-                  sx={{
-                    bgcolor: theme.palette.primary.main,
-                    '&:hover': {
-                      bgcolor: theme.palette.primary.dark
-                    }
-                  }}
-                >
-                  Send
-                </Button>
-              </Box>
-            </>
-          ) : (
-            <Typography
-              variant="h6"
-              sx={{
-                textAlign: 'center',
-                mt: 4,
-                color: theme.palette.text.secondary
-              }}
-            >
-              Select a user to start chatting
-            </Typography>
-          )}
+                        >
+                          <ListItemText
+                              primary={listing.product_title}
+                              secondary={`₱${listing.price}`}
+                          />
+                        </ListItem>
+                    ))}
+                  </List>
+                </>
+            )}
+          </Box>
+
+          {/* Right Panel - Chat Area */}
+          <Box sx={{
+            width: '70%',
+            display: 'flex',
+            flexDirection: 'column',
+            bgcolor: theme.palette.background.paper,
+            borderRadius: 1,
+            p: 2
+          }}>
+            {selectedUser ? (
+                <>
+                  <Box sx={{ flexGrow: 1, overflowY: 'auto', mb: 2 }}>
+                    <List>
+                      {messages.map((message) => (
+                          <ListItem
+                              key={message.id}
+                              sx={{
+                                display: 'flex',
+                                justifyContent: message.sender_id === currentUserId ? 'flex-end' : 'flex-start'
+                              }}
+                          >
+                            <Box sx={{
+                              backgroundColor: message.sender_id === currentUserId
+                                  ? theme.palette.primary.main
+                                  : theme.palette.grey[200],
+                              borderRadius: '8px',
+                              padding: '10px',
+                              maxWidth: '70%'
+                            }}>
+                              <ListItemText
+                                  primary={message.content}
+                                  secondary={new Date(message.sent_at).toLocaleString()}
+                              />
+                            </Box>
+                          </ListItem>
+                      ))}
+                    </List>
+                  </Box>
+                  <Box sx={{ display: 'flex', gap: 1 }}>
+                    <TextField
+                        fullWidth
+                        value={newMessage}
+                        onChange={(e) => setNewMessage(e.target.value)}
+                        placeholder="Type a message..."
+                        onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
+                    />
+                    <Button variant="contained" onClick={handleSendMessage}>
+                      Send
+                    </Button>
+                  </Box>
+                </>
+            ) : (
+                <Typography variant="h6" sx={{ textAlign: 'center', mt: 4 }}>
+                  Select a user to start chatting
+                </Typography>
+            )}
+          </Box>
         </Box>
-      </Box>
-    </PageContainer>
+
+        {/* Listing Detail Dialog */}
+        <Dialog
+            open={openDetailDialog}
+            onClose={() => setOpenDetailDialog(false)}
+            maxWidth="md"
+            fullWidth
+        >
+          {selectedListing && (
+              <>
+                <DialogTitle>{selectedListing.product_title}</DialogTitle>
+                <DialogContent>
+                  <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+                    <img
+                        src={`http://localhost:5173${selectedListing.image}`}
+                        alt={selectedListing.product_title}
+                        style={{ width: '100%', maxHeight: '400px', objectFit: 'contain' }}
+                    />
+                    <Typography variant="h6">
+                      Price: ₱{selectedListing.price}
+                    </Typography>
+                    <Typography variant="subtitle1">
+                      Category: {selectedListing.category}
+                    </Typography>
+                    <Typography>
+                      {selectedListing.product_description}
+                    </Typography>
+                  </Box>
+                </DialogContent>
+                <DialogActions>
+                  <Button
+                      onClick={handleAcceptListing}
+                      variant="contained"
+                      color="success"
+                  >
+                    Accept Listing
+                  </Button>
+                  <Button onClick={() => setOpenDetailDialog(false)}>
+                    Close
+                  </Button>
+                </DialogActions>
+              </>
+          )}
+        </Dialog>
+
+        {/* Confirmation Dialog */}
+        <Dialog
+            open={openConfirmDialog}
+            onClose={() => setOpenConfirmDialog(false)}
+        >
+          <DialogTitle>Confirm Acceptance</DialogTitle>
+          <DialogContent>
+            <Typography>
+              Are you sure you want to accept this listing?
+            </Typography>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleConfirmAccept} variant="contained" color="success">
+              Yes, Accept
+            </Button>
+            <Button onClick={() => setOpenConfirmDialog(false)}>
+              Cancel
+            </Button>
+          </DialogActions>
+        </Dialog>
+      </PageContainer>
   );
 };
 
