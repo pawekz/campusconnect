@@ -12,7 +12,7 @@ const AnalyticsReport = ({ userId }) => {
     const fetchReport = async (userId) => {
         try {
             console.log(`Fetching report for userId: ${userId}`);
-            const response = await axios.get(`http://localhost:8080/API/analytics/generateReport/${userId}`);
+            const response = await axios.get(`http://localhost:8080/API/stats/generateReport/${userId}`);
             console.log('Response status:', response.status);
             console.log('Response data:', response.data);
 

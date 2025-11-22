@@ -16,7 +16,7 @@ const AnalyticsHistoryChart = () => {
 
     const fetchData = (userId) => {
         console.log(`Fetching data for userId: ${userId}`);
-        axios.get(`http://localhost:8080/API/analytics/history/${userId}`)
+        axios.get(`http://localhost:8080/API/stats/history/${userId}`)
             .then(response => {
                 console.log('Response status:', response.status);
                 console.log('Response data:', response.data);

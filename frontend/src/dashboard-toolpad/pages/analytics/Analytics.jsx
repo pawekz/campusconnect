@@ -18,7 +18,7 @@ function Analytics() {
     const fetchListingAnalytics = async () => {
         const token = localStorage.getItem('token');
         try {
-            const response = await axios.get('http://localhost:8080/API/analytics/listings-by-month', {
+            const response = await axios.get('http://localhost:8080/API/stats/listings-by-month', {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
             setListingData({
