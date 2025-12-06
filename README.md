@@ -777,7 +777,7 @@ The backend exposes RESTful APIs at the base URL: **http://localhost:8080/api/**
 
 | Name | Role | Responsibilities |
 |------|------|------------------|
-| Paulo Carabuena | Developer | Full-stack Development |
+| Paulo Carabuena | Developer | Full-stack Development / Team Leader |
 | Neil Adrian Bas | Developer | Full-stack Development |
 | Jenelyn Mendoza | Developer | Full-stack Development |
 
